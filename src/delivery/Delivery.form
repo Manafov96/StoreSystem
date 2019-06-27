@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Container class="javax.swing.JDialog" name="DialogInvoice">
+      <Properties>
+        <Property name="title" type="java.lang.String" value="&#x424;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430;"/>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[488, 650]"/>
+        </Property>
+        <Property name="modalityType" type="java.awt.Dialog$ModalityType" editor="org.netbeans.modules.form.editors.EnumEditor">
+          <Value id="APPLICATION_MODAL"/>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="jlbInvoice" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="175" max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jScrollPane2" alignment="0" min="-2" pref="269" max="-2" attributes="0"/>
+                              <Component id="jcbPaymentType" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jtxtInvoiceNumberDialog" alignment="0" min="-2" pref="51" max="-2" attributes="0"/>
+                                      <Component id="jlbInvoiceNumber" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jlbInvoiceDate" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jDateInvoice" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Component id="jlbPaymentType" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlbPaymentText" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jchbReversal" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
+                          <Component id="jbtnSaveDialog" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                          <Component id="jbtnCloseDialog" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
+                          <Component id="jpCreditNote" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace pref="93" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jlbInvoice" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jlbInvoiceNumber" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jtxtInvoiceNumberDialog" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jlbInvoiceDate" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jDateInvoice" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                  <Component id="jlbPaymentType" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jcbPaymentType" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jlbPaymentText" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jchbReversal" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jpCreditNote" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="71" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jbtnSaveDialog" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jbtnCloseDialog" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="jlbInvoice">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="24" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x424;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430;"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbInvoiceNumber">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtInvoiceNumberDialog">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtInvoiceNumberDialogFocusLost"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jtxtInvoiceNumberDialogMouseClicked"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+          </AuxValues>
+        </Component>
+        <Component class="com.toedter.calendar.JDateChooser" name="jDateInvoice">
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbInvoiceDate">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x430;&#x442;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbPaymentType">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbPaymentTypeActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbPaymentType">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f; &#x43d;&#x430; &#x43f;&#x43b;&#x430;&#x449;&#x430;&#x43d;&#x435;:"/>
+          </Properties>
+        </Component>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTextArea" name="jtaPaymentText">
+              <Properties>
+                <Property name="columns" type="int" value="20"/>
+                <Property name="rows" type="int" value="5"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Component class="javax.swing.JLabel" name="jlbPaymentText">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x43f;&#x44a;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x43d;&#x43e; &#x43e;&#x43f;&#x438;&#x441;&#x430;&#x43d;&#x438;&#x435;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="jchbReversal">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x442;&#x43e;&#x440;&#x43d;&#x43e;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x417;&#x430; &#x43c;&#x43e;&#x43c;&#x435;&#x43d;&#x442;&#x430; &#x43d;&#x435; &#x441;&#x435; &#x438;&#x437;&#x43f;&#x43e;&#x43b;&#x437;&#x432;&#x430;!!!"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jchbReversalActionPerformed"/>
+          </Events>
+        </Component>
+        <Container class="javax.swing.JPanel" name="jpCreditNote">
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jlbCreditNoteNumber" alignment="0" min="-2" pref="173" max="-2" attributes="0"/>
+                                  <Component id="jlbDateCreditNote" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jCreditNoteDate" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="jtxtCreditNoteNumber" alignment="0" min="-2" pref="57" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="jlbCreditNoteText" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jlbCreditNoteNumber" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="jtxtCreditNoteNumber" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jCreditNoteDate" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jlbDateCreditNote" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jlbCreditNoteText" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="jScrollPane3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jlbCreditNoteText">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x43f;&#x44a;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x43d;&#x43e; &#x43e;&#x43f;&#x438;&#x441;&#x430;&#x43d;&#x438;&#x435;:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jlbCreditNoteNumber">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440; &#x43d;&#x430; &#x43a;&#x440;&#x435;&#x434;&#x438;&#x442;&#x43d;&#x43e; &#x438;&#x437;&#x432;&#x435;&#x441;&#x442;&#x438;&#x435;:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="jtxtCreditNoteNumber">
+            </Component>
+            <Component class="javax.swing.JLabel" name="jlbDateCreditNote">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="&#x414;&#x430;&#x442;&#x430; &#x43d;&#x430; &#x43a;&#x440;&#x435;&#x434;&#x438;&#x442;&#x43d;&#x43e; &#x438;&#x437;&#x432;&#x435;&#x441;&#x442;&#x438;&#x435;:"/>
+              </Properties>
+            </Component>
+            <Component class="com.toedter.calendar.JDateChooser" name="jCreditNoteDate">
+            </Component>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTextArea" name="jTextArea1">
+                  <Properties>
+                    <Property name="columns" type="int" value="20"/>
+                    <Property name="rows" type="int" value="5"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
+        <Component class="javax.swing.JButton" name="jbtnSaveDialog">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/Save32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x438;&#x441;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnSaveDialogActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnCloseDialog">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/Delete32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x418;&#x437;&#x445;&#x43e;&#x434;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnCloseDialogActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPopupMenu" name="jPopupMenu2">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+        <Property name="useNullLayout" type="boolean" value="true"/>
+      </Layout>
+      <SubComponents>
+        <MenuItem class="javax.swing.JMenuItem" name="jPopUpDelDelete">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/delete16.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x418;&#x437;&#x442;&#x440;&#x438;&#x439;!"/>
+          </Properties>
+        </MenuItem>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="jbtnRefreshDelivery">
+      <Properties>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/consultation/refresh.png"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnRefreshDeliveryActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="jcbCountry">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="0"/>
+    <Property name="title" type="java.lang.String" value="&#x414;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;"/>
+    <Property name="resizable" type="boolean" value="false"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
+  </SyntheticProperties>
+  <Events>
+    <EventHandler event="windowClosing" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="onClose"/>
+  </Events>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
+          <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel3" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="jPanel1" min="-2" pref="110" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel3" min="-2" pref="162" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="10" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="564" max="-2" attributes="0"/>
+                  <Component id="jlbDelivery" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jcbLang" min="-2" pref="93" max="-2" attributes="0"/>
+                      <Component id="jlbLang" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jlbDeliveryNumber" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtxtDeliveryNumber" min="-2" pref="47" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jDateDelivery" min="-2" pref="126" max="-2" attributes="0"/>
+                      <Component id="jlbDate" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="37" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jlbDealType" min="-2" max="-2" attributes="0"/>
+                      <Component id="jcbDealType" min="-2" pref="167" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="37" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jlbSupplier" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jcbSupplier" alignment="0" min="-2" pref="238" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  <Component id="jbtnNewSupplier" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jbtnEditClient" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="204" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <Component id="jlbLang" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jcbLang" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jlbDelivery" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jlbDealType" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jcbDealType" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="jlbSupplier" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jcbSupplier" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                                  <Component id="jbtnEditClient" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                                  <Component id="jbtnNewSupplier" alignment="3" min="-2" pref="32" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <Component id="jlbDate" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jDateDelivery" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="jlbDeliveryNumber" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="jtxtDeliveryNumber" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="51" pref="51" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JTextField" name="jtxtDeliveryNumber">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440; &#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;!"/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtDeliveryNumberFocusLost"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jtxtDeliveryNumberMouseClicked"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbDelivery">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Times New Roman" size="24" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;"/>
+          </Properties>
+        </Component>
+        <Component class="com.toedter.calendar.JDateChooser" name="jDateDelivery">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x430;&#x442;&#x430; &#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;."/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbDate">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x430;&#x442;&#x430; &#x43d;&#x430; &#x441;&#x434;&#x435;&#x43b;&#x43a;&#x430;&#x442;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbDealType">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x422;&#x438;&#x43f; &#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbDealTypeActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbDealType">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f; &#x43d;&#x430; &#x441;&#x434;&#x435;&#x43b;&#x43a;&#x430;&#x442;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbSupplier">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x447;&#x438;&#x43a;."/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbSupplier">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x447;&#x438;&#x43a;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnNewSupplier">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/NewClient.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x432; &#x414;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x447;&#x438;&#x43a;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x44f;&#x43d;&#x435; &#x43d;&#x430; &#x43d;&#x43e;&#x432; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x447;&#x438;&#x43a;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnNewSupplierActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbLang">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x415;&#x437;&#x438;&#x43a; &#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;&#x442;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbLangActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbLang">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x415;&#x437;&#x438;&#x43a; &#x43d;&#x430; &#x441;&#x434;&#x435;&#x43b;&#x43a;&#x430;&#x442;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbDeliveryNumber">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnEditClient">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/EditClient32x32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x438;&#x440;&#x430;&#x439;"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+            <Property name="focusPainted" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnEditClientActionPerformed"/>
+          </Events>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Container class="javax.swing.JPanel" name="jPanel2">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jScrollPane1" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlbArticleGroup" min="-2" max="-2" attributes="0"/>
+                              <Component id="jcbArticleGroups" min="-2" pref="155" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace pref="34" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlbArticle" min="-2" max="-2" attributes="0"/>
+                              <Component id="jcbArticle" min="-2" pref="402" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlbLot" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtxtLots" min="-2" pref="70" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jlbQty" max="32767" attributes="0"/>
+                              <Component id="jtxtQty" min="-2" pref="64" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlbPrice" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtxtPrice" min="-2" pref="76" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
+                          <Component id="jbtnAdd" min="-2" pref="124" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                          <Component id="jbtnClear" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlbTotalWoVat" alignment="0" min="-2" pref="56" max="-2" attributes="0"/>
+                              <Component id="jlbVatValue" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlbTotalWithVat" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="jtxtTotalWoVat" alignment="0" min="-2" pref="79" max="-2" attributes="0"/>
+                              <Component id="jtxtVatValue" alignment="0" min="-2" pref="79" max="-2" attributes="0"/>
+                              <Component id="jtxtTotalWithVat" alignment="0" min="-2" pref="79" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jlbArticle" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jcbArticle" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="jlbArticleGroup" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jcbArticleGroups" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jbtnClear" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jbtnAdd" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" alignment="0" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jlbPrice" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                                  <Component id="jtxtPrice" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="jlbLot" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jtxtLots" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Component id="jlbQty" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
+                                  <Component id="jtxtQty" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" pref="210" max="-2" attributes="0"/>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jlbTotalWoVat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtxtTotalWoVat" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jlbVatValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtxtVatValue" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jlbTotalWithVat" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jtxtTotalWithVat" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace pref="15" max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JSpinner" name="jtxtQty">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41a;&#x43e;&#x43b;&#x438;&#x447;&#x435;&#x441;&#x442;&#x432;&#x43e;."/>
+            <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+              <SpinnerEditor format="#" type="3"/>
+            </Property>
+            <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="1" type="code"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbArticleGroups">
+          <Properties>
+            <Property name="maximumRowCount" type="int" value="15"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x413;&#x440;&#x443;&#x43f;&#x430; &#x43d;&#x430; &#x430;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbArticleGroupsActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbArticleGroup">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x413;&#x440;&#x443;&#x43f;&#x430; &#x43d;&#x430; &#x430;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbArticle">
+          <Properties>
+            <Property name="maximumRowCount" type="int" value="15"/>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x410;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbArticleActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbArticle">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x410;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbLot">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x430;&#x440;&#x442;&#x438;&#x434;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtPrice">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value="&#x415;&#x434;&#x438;&#x43d;&#x438;&#x447;&#x43d;&#x430; &#x446;&#x435;&#x43d;&#x430; &#x441; &#x414;&#x414;&#x421;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtPriceFocusLost"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbPrice">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x426;&#x435;&#x43d;&#x430; (&#x441; &#x414;&#x414;&#x421;)"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnAdd">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/cart32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x438;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x43e;&#x431;&#x430;&#x432;&#x438; &#x430;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;&#x430; &#x43a;&#x44a;&#x43c; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;&#x442;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnAddActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+          <AuxValues>
+            <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+          </AuxValues>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Component class="javax.swing.JTable" name="jTable1">
+              <Properties>
+                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                  <Table columnCount="8" rowCount="0">
+                    <Column editable="false" title="ID" type="java.lang.Integer"/>
+                    <Column editable="false" title="&#x41a;&#x43e;&#x434; (SKU)" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x410;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;" type="java.lang.Object"/>
+                    <Column editable="true" title="&#x415;&#x434;&#x438;&#x43d;&#x438;&#x447;&#x43d;&#x430; &#x446;&#x435;&#x43d;&#x430; (&#x20ac;)" type="java.lang.Double"/>
+                    <Column editable="false" title="&#x426;&#x435;&#x43d;&#x430; &#x431;&#x435;&#x437; &#x414;&#x414;&#x421; (&#x20ac;)" type="java.lang.Double"/>
+                    <Column editable="true" title="&#x41a;&#x43e;&#x43b;&#x438;&#x447;&#x435;&#x441;&#x442;&#x432;&#x43e;" type="java.lang.Object"/>
+                    <Column editable="false" title="ME" type="java.lang.Object"/>
+                    <Column editable="false" title="&#x41e;&#x431;&#x449;&#x430; &#x446;&#x435;&#x43d;&#x430; (&#x20ac;)" type="java.lang.Double"/>
+                  </Table>
+                </Property>
+                <Property name="toolTipText" type="java.lang.String" value="&#x410;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;&#x438; &#x43a;&#x44a;&#x43c; &#x442;&#x430;&#x437;&#x438; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;."/>
+                <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                  <TableColumnModel selectionModel="0">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="10" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="490" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="85" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="70" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="30" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="10" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="80" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                  </TableColumnModel>
+                </Property>
+                <Property name="componentPopupMenu" type="javax.swing.JPopupMenu" editor="org.netbeans.modules.form.ComponentChooserEditor">
+                  <ComponentRef name="jPopupMenu2"/>
+                </Property>
+                <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                  <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable1MouseReleased"/>
+                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jTable1PropertyChange"/>
+              </Events>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Component class="javax.swing.JLabel" name="jlbTotalWoVat">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x41e;&#x431;&#x449;&#x43e;:"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbVatValue">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x414;&#x421; (%):"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbTotalWithVat">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x412;&#x441;&#x438;&#x447;&#x43a;&#x43e;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtTotalWoVat">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtVatValue">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtTotalWithVat">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnClear">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/clear.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x418;&#x437;&#x442;&#x440;&#x438;&#x439;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x440;&#x435;&#x43c;&#x430;&#x445;&#x43d;&#x438; &#x430;&#x440;&#x442;&#x438;&#x43a;&#x443;&#x43b;&#x430; &#x43e;&#x442; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;&#x442;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnClearActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbQty">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41a;&#x43e;&#x43b;&#x438;&#x447;&#x435;&#x441;&#x442;&#x432;&#x43e;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtLots">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41f;&#x430;&#x440;&#x442;&#x438;&#x434;&#x430; &#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;&#x442;&#x430; (&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x430; &#x441;&#x435; &#x430;&#x432;&#x442;&#x43e;&#x43c;&#x430;&#x442;&#x438;&#x447;&#x43d;&#x43e;)."/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+    <Container class="javax.swing.JPanel" name="jPanel3">
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jlbTransportCosts" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlbBankCosts" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlbOtherCosts" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlbChannelCosts" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                          <Component id="jtxtBankCosts" min="-2" pref="61" max="-2" attributes="0"/>
+                          <Component id="jtxtTransportCosts" min="-2" pref="61" max="-2" attributes="0"/>
+                          <Component id="jtxtChannelCosts" alignment="0" min="-2" pref="61" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="jtxtOtherCosts" min="-2" pref="61" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jtxtInvoiceNumber" max="32767" attributes="0"/>
+                      <Component id="jlbInvoiceNumbers" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jbntInvoice" max="32767" attributes="0"/>
+                      <Component id="jtbnPrint" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="94" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="jcbPayment" pref="117" max="32767" attributes="0"/>
+                      <Component id="jlbStatus" min="-2" max="-2" attributes="0"/>
+                      <Component id="jlbPayment" min="-2" max="-2" attributes="0"/>
+                      <Component id="jcbStatuses" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="jbtnSave" min="-2" pref="114" max="-2" attributes="0"/>
+                      <Component id="jbtnClose" min="-2" pref="114" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jbtnSave" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jbtnClose" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" alignment="0" attributes="0">
+                                              <Component id="jlbInvoiceNumbers" min="-2" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="jtxtInvoiceNumber" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="jbntInvoice" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jtbnPrint" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="jlbPayment" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jcbPayment" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                      <Component id="jlbStatus" min="-2" pref="14" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="jcbStatuses" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jtxtTransportCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlbTransportCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jtxtBankCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlbBankCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jtxtChannelCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlbChannelCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jtxtOtherCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="jlbOtherCosts" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JTextField" name="jtxtTransportCosts">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x420;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438; &#x437;&#x430; &#x442;&#x440;&#x430;&#x43d;&#x441;&#x43f;&#x43e;&#x440;&#x442;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtTransportCostsFocusLost"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtOtherCosts">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x414;&#x440;&#x443;&#x433;&#x438; &#x434;&#x43e;&#x43f;&#x44a;&#x43b;&#x43d;&#x438;&#x442;&#x435;&#x43b;&#x43d;&#x438; &#x440;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtOtherCostsFocusLost"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtBankCosts">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x420;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438; &#x437;&#x430; &#x431;&#x430;&#x43d;&#x43a;&#x430;&#x442;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtBankCostsFocusLost"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtChannelCosts">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="4"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x420;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438; &#x437;&#x430; &#x43f;&#x43e;&#x441;&#x440;&#x435;&#x434;&#x43d;&#x438;&#x43a;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jtxtChannelCostsFocusLost"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbTransportCosts">
+          <Properties>
+            <Property name="horizontalAlignment" type="int" value="0"/>
+            <Property name="text" type="java.lang.String" value="&#x422;&#x440;&#x430;&#x43d;&#x441;&#x43f;&#x43e;&#x440;&#x442;&#x43d;&#x438; &#x440;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438;:"/>
+            <Property name="verticalAlignment" type="int" value="1"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbBankCosts">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x411;&#x430;&#x43d;&#x43a;&#x43e;&#x432;&#x438; &#x440;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbChannelCosts">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x417;&#x430; &#x43f;&#x43e;&#x441;&#x440;&#x435;&#x434;&#x43d;&#x438;&#x43a;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbOtherCosts">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x414;&#x440;&#x443;&#x433;&#x438; &#x440;&#x430;&#x437;&#x445;&#x43e;&#x434;&#x438;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jtxtInvoiceNumber">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440; &#x438; &#x434;&#x430;&#x442;&#x430; &#x43d;&#x430; &#x444;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430; (&#x433;&#x435;&#x43d;&#x435;&#x440;&#x438;&#x440;&#x430; &#x441;&#x435; &#x430;&#x432;&#x442;&#x43e;&#x43c;&#x430;&#x442;&#x438;&#x447;&#x43d;&#x43e; &#x43f;&#x440;&#x438; &#x432;&#x44a;&#x432;&#x435;&#x436;&#x434;&#x430;&#x43d;&#x435; &#x43d;&#x430; &#x444;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430;)."/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbInvoiceNumbers">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x41d;&#x43e;&#x43c;&#x435;&#x440; &#x438; &#x434;&#x430;&#x442;&#x430; &#x43d;&#x430; &#x444;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430;&#x442;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbPayment">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41d;&#x430;&#x447;&#x438;&#x43d; &#x43d;&#x430; &#x43f;&#x43b;&#x430;&#x449;&#x430;&#x43d;&#x435;."/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbPayment">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x422;&#x438;&#x43f; &#x43f;&#x43b;&#x430;&#x449;&#x430;&#x43d;&#x435;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jcbStatuses">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441; &#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;&#x442;&#x430;."/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jcbStatusesActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jlbStatus">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="&#x421;&#x442;&#x430;&#x442;&#x443;&#x441; &#x43d;&#x430; &#x441;&#x434;&#x435;&#x43b;&#x43a;&#x430;&#x442;&#x430;:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnSave">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/Save32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x438;&#x441;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x417;&#x430;&#x43f;&#x438;&#x441;&#x432;&#x430; &#x43f;&#x440;&#x43e;&#x434;&#x430;&#x436;&#x431;&#x430;&#x442;&#x430; &#x432; &#x431;&#x430;&#x437;&#x430;&#x442;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x438;!"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnSaveActionPerformed"/>
+          </Events>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JButton" name="jtbnPrint">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/Print32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x41f;&#x435;&#x447;&#x430;&#x442;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41e;&#x442;&#x43f;&#x435;&#x447;&#x430;&#x442;&#x432;&#x430;&#x43d;&#x435; &#x43d;&#x430; &#x444;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430; &#x43f;&#x43e; &#x43f;&#x440;&#x438;&#x43a;&#x43b;&#x44e;&#x447;&#x435;&#x43d;&#x430; &#x434;&#x43e;&#x441;&#x442;&#x430;&#x432;&#x43a;&#x430;!"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jtbnPrintActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbtnClose">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/Delete32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x418;&#x437;&#x445;&#x43e;&#x434;"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x418;&#x437;&#x445;&#x43e;&#x434;!"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnCloseActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jbntInvoice">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/sale/invoice32.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&#x424;&#x430;&#x43a;&#x442;&#x443;&#x440;&#x430;"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbntInvoiceActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="jSeparator2">
+        </Component>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>
