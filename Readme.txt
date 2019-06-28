@@ -20,7 +20,7 @@ Warehouse.FDB is database file for demonstration how work the apllication.
 
 In main folder have file ClearDB.sql. This is script for clear your database and start from begining.
 
-In folder Picture save Picture for Main Form and Login Form. For change file name must be Picture.jpeg for Main form and LoginPicture for Login Form.
+In folder Picture save Picture for Main Form and Login Form. For change file name must be Picture.jpeg for Main form and LoginPicture.jpeg for Login Form.
 
 In folder Reports save exported Reports in excel file.
 
