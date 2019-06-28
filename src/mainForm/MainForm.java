@@ -49,6 +49,7 @@ import settings.PaymentTypes;
  * @author Viko
  */
 public class MainForm extends javax.swing.JFrame {
+
     /**
      * Creates new form MainForm
      */
@@ -58,6 +59,7 @@ public class MainForm extends javax.swing.JFrame {
         setDate();
         jUser.setText("Потребител: " + Login.user);
     }
+
     private void setDate() {
         String Date = new SimpleDateFormat("dd.MM.yyyy").format(Calendar.getInstance().getTime());
         jDate.setText("Дата: " + Date);
@@ -65,9 +67,9 @@ public class MainForm extends javax.swing.JFrame {
         File directory = new File(".");
         String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
 
-        jPicture.setIcon(new ImageIcon(new javax.swing.ImageIcon(absolutePath + 
-                         "Pictures\\Picture.jpeg").getImage().getScaledInstance(jPicture.getWidth(), 
-                          jPicture.getHeight(), Image.SCALE_SMOOTH)));
+        jPicture.setIcon(new ImageIcon(new javax.swing.ImageIcon(absolutePath
+                + "Pictures\\Picture.jpeg").getImage().getScaledInstance(jPicture.getWidth(),
+                jPicture.getHeight(), Image.SCALE_SMOOTH)));
 
     }
 
@@ -571,26 +573,6 @@ public class MainForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void onExit(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onExit
-        int dialogButton = JOptionPane.showConfirmDialog(null, "Сигурни ли сте, че искате да излезнете!", "Главно меню", JOptionPane.YES_NO_OPTION);
-        if (dialogButton == JOptionPane.YES_OPTION) {
-            Connection connection;
-            PreparedStatement ps;
-            try {
-                connection = getConnection();
-                ps = connection.prepareStatement("execute procedure CHECK_STATUS_ON_EXIT");
-                ps.executeUpdate();
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(this, ex);
-            }
-            System.exit(0);
-            if (dialogButton == JOptionPane.NO_OPTION) {
-                remove(dialogButton);
-            }
-        }
-    }//GEN-LAST:event_onExit
-
     private void jmiSaleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiSaleActionPerformed
         SALE sale = new SALE();
         sale.setVisible(true);
@@ -667,10 +649,10 @@ public class MainForm extends javax.swing.JFrame {
         try {
             Connection con = getConnection();
             PreparedStatement ps = con.prepareStatement("select MC.NAME, MC.COUNTRY, MC.CITY, MC.ADDRESS, MC.MOL, MC.LOGO, "
-                                                    + "MC.VAT_PERCENTAGE,\n"
-                                                    + "MC.PHONES, MC.SITE, MC.MAIL, MC.BANK, MC.CONTO_NU, MC.IBAN, MC.BIC,\n"
-                                                    + "MC.VAT_NUMBER, MC.GREICHT, MC.HRB\n"
-                                                    + "from MY_COMPANY MC where MC.ID = 1");
+                    + "MC.VAT_PERCENTAGE,\n"
+                    + "MC.PHONES, MC.SITE, MC.MAIL, MC.BANK, MC.CONTO_NU, MC.IBAN, MC.BIC,\n"
+                    + "MC.VAT_NUMBER, MC.GREICHT, MC.HRB\n"
+                    + "from MY_COMPANY MC where MC.ID = 1");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 myCompany.jtxtName.setText(rs.getString("NAME"));
@@ -691,7 +673,7 @@ public class MainForm extends javax.swing.JFrame {
                 myCompany.jtxtHRB.setText(rs.getString("HRB"));
                 myCompany.jChoosedPicture.setIcon(ResizeImage(null, rs.getBytes("LOGO")));
             }
-             company.setVisible(true);
+            company.setVisible(true);
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
@@ -730,10 +712,10 @@ public class MainForm extends javax.swing.JFrame {
         try {
             Connection con = getConnection();
             PreparedStatement ps = con.prepareStatement("select MC.NAME, MC.COUNTRY, MC.CITY, MC.ADDRESS, MC.MOL, MC.LOGO, "
-                                                    + "MC.VAT_PERCENTAGE,\n"
-                                                    + "MC.PHONES, MC.SITE, MC.MAIL, MC.BANK, MC.CONTO_NU, MC.IBAN, MC.BIC,\n"
-                                                    + "MC.VAT_NUMBER, MC.GREICHT, MC.HRB\n"
-                                                    + "from MY_COMPANY MC where MC.ID = 1");
+                    + "MC.VAT_PERCENTAGE,\n"
+                    + "MC.PHONES, MC.SITE, MC.MAIL, MC.BANK, MC.CONTO_NU, MC.IBAN, MC.BIC,\n"
+                    + "MC.VAT_NUMBER, MC.GREICHT, MC.HRB\n"
+                    + "from MY_COMPANY MC where MC.ID = 1");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 myCompany.jtxtName.setText(rs.getString("NAME"));
@@ -885,10 +867,20 @@ public class MainForm extends javax.swing.JFrame {
         gen.setVisible(true);
     }//GEN-LAST:event_jmiGeneratorActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void onExit(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onExit
+        int dialogButton = JOptionPane.showConfirmDialog(null, "Сигурни ли сте, че искате да излезнете!", "Главно меню", JOptionPane.YES_NO_OPTION);
+        if (dialogButton == JOptionPane.YES_OPTION) {
+            System.exit(0);
+            if (dialogButton == JOptionPane.NO_OPTION) {
+                remove(dialogButton);
+            }
+        }
+    }//GEN-LAST:event_onExit
+
+/**
+ * @param args the command line arguments
+ */
+public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -899,16 +891,28 @@ public class MainForm extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                }
+                
+
+}
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MainForm.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+
+} catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+
+} catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        
+
+} catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainForm.class
+.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
