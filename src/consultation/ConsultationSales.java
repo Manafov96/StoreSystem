@@ -227,6 +227,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String saleDate = dateFormat.format(rs.getDate("DEAL_DATE"));
                 sale.jtxtInvoiceNumber.setText(rs.getString("INVOICE_NUMBER") + "/" + saleDate);
+                sale.jtxtInvoiceNumberDialog.setText(rs.getString("INVOICE_NUMBER"));
                 sale.jcbPayment.getModel().setSelectedItem(jPayment.getModel().getSelectedItem());
                 sale.jtaPaymentText.setText(rs.getString("PAYMENT_TEXT"));
 

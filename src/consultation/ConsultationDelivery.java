@@ -211,6 +211,7 @@ public class ConsultationDelivery extends javax.swing.JFrame {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String saleDate = dateFormat.format(rs.getDate("DEAL_DATE"));
                 delivery.jtxtInvoiceNumber.setText(rs.getString("INVOICE_NUMBER") + "/" + saleDate);
+                delivery.jtxtInvoiceNumberDialog.setText(rs.getString("INVOICE_NUMBER"));
                 delivery.jcbPayment.getModel().setSelectedItem(jPayment.getModel().getSelectedItem());
                 delivery.jtaPaymentText.setText(rs.getString("PAYMENT_TEXT"));
                 delivery.jlbVatValue.setText("ДДС (" + delivery.VatPCT + "%): ");
