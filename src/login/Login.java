@@ -45,9 +45,22 @@ public class Login extends javax.swing.JFrame {
         this.getRootPane().setDefaultButton(jbtnLogin);
         File directory = new File(".");
         String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
-        jMainPicture.setIcon(new ImageIcon(new javax.swing.ImageIcon(absolutePath + 
-                             "Pictures\\LoginPicture.jpeg").getImage().getScaledInstance(jMainPicture.getWidth(), 
-                              jMainPicture.getHeight(), Image.SCALE_SMOOTH)));
+        jMainPicture.setIcon(new ImageIcon(new javax.swing.ImageIcon(absolutePath
+                + "Pictures\\LoginPicture.jpeg").getImage().getScaledInstance(jMainPicture.getWidth(),
+                jMainPicture.getHeight(), Image.SCALE_SMOOTH)));
+    }
+
+    public void checkStatus() {
+        Connection connection;
+        PreparedStatement ps;
+        try {
+            connection = getConnection();
+            ps = connection.prepareStatement("execute procedure CHECK_STATUS_ON_EXIT");
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
     }
 
     /**
@@ -176,7 +189,7 @@ public class Login extends javax.swing.JFrame {
         try {
             connection = getConnection();
             ps = connection.prepareStatement("SELECT U.ID, U.USERNAME, U.PASSWORD, U.USER_TYPE FROM USERS U "
-                                             + "WHERE username = ? AND password = ?");
+                    + "WHERE username = ? AND password = ?");
             ps.setString(1, jtxtUserName.getText());
             ps.setString(2, String.valueOf(jTxtPassword.getPassword()));
             ResultSet rs = ps.executeQuery();
@@ -187,6 +200,7 @@ public class Login extends javax.swing.JFrame {
                 setVisible(false);
                 MainForm main = new MainForm();
                 main.setVisible(true);
+                checkStatus();
                 if (userType == 2) {
                     main.jmReports.setVisible(false);
                     main.jbtnFastFirm.setVisible(false);
