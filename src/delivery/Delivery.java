@@ -153,21 +153,21 @@ public class Delivery extends javax.swing.JFrame {
         switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
             case 1: {
                 String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_DE) NAME_DE from ARTICLES A "
-                        + "where A.ACTIVE_YN = 1 and A.ARTICLE_GROUPS_ID = "
+                        + "where A.ARTICLE_GROUPS_ID = "
                         + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
                 setValuesComboBox(sql, jcbArticle, true, -1, false);
                 break;
             }
             case 2: {
                 String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_EN) NAME_DE from ARTICLES A "
-                        + "where A.ACTIVE_YN = 1 and A.ARTICLE_GROUPS_ID = "
+                        + "where A.ARTICLE_GROUPS_ID = "
                         + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
                 setValuesComboBox(sql, jcbArticle, true, -1, false);
                 break;
             }
             case 3: {
                 String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_BG) NAME_DE from ARTICLES A "
-                        + "where A.ACTIVE_YN = 1 and A.ARTICLE_GROUPS_ID = "
+                        + "where A.ARTICLE_GROUPS_ID = "
                         + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
                 setValuesComboBox(sql, jcbArticle, true, -1, false);
                 break;
