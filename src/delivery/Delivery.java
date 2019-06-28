@@ -41,7 +41,9 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import Tools.DropDown;
+import static Tools.getConnection.getConnection;
 import static Tools.setValuesComboBox.setValuesComboBox;
+import java.io.InputStream;
 import login.Login;
 import net.sf.jasperreports.engine.JasperExportManager;
 import sale.SALE;
@@ -76,9 +78,9 @@ public class Delivery extends javax.swing.JFrame {
         jtxtDeliveryNumber.setBackground(Color.pink);
         jtxtDeliveryNumber.setEditable(false);
         ////// This is for add Reversal Delivery////////
-            jchbReversal.setVisible(false);
-            jpCreditNote.setVisible(false);
-            jTable1.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
+        jchbReversal.setVisible(false);
+        jpCreditNote.setVisible(false);
+        jTable1.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
         /////////////////////////////////////////////////
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
@@ -115,7 +117,7 @@ public class Delivery extends javax.swing.JFrame {
         jDateDelivery.setDate(date);
     }
 
-    private void setValuesSuppliers() {   
+    private void setValuesSuppliers() {
         setValuesComboBox("select C.ID, C.NAME CLIENTS from CLIENTS C where C.TYPE_ID = 2 and C.ID > 0", jcbSupplier, true, -1, false);
     }
 
@@ -125,73 +127,73 @@ public class Delivery extends javax.swing.JFrame {
 
     private void setValueStatuses() {
         setValuesComboBox("select NS.ID, NS.NAME STATUS from N_STATUSES NS", jcbStatuses, false, 2, false);
-            
+
     }
 
     private void setValuesPaymentDialog() {
-            switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
-                case 1: {
-                    setValuesComboBox("select NPM.ID, NPM.NAME_GERM from  N_PAYMENT_METHODS NPM", jcbPaymentType, false, -1, false);
-                    break;
-                }
-                case 2: {
-                    setValuesComboBox("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM", jcbPaymentType, false, -1, false);
-                    break;
-                }
-                case 3: {
-                    setValuesComboBox("select NPM.ID, NPM.NAME_BUL from  N_PAYMENT_METHODS NPM", jcbPaymentType, false, -1, false);
-                    break;
-                }
-                default:
-                    break;
+        switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
+            case 1: {
+                setValuesComboBox("select NPM.ID, NPM.NAME_GERM from  N_PAYMENT_METHODS NPM", jcbPaymentType, false, -1, false);
+                break;
             }
+            case 2: {
+                setValuesComboBox("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM", jcbPaymentType, false, -1, false);
+                break;
+            }
+            case 3: {
+                setValuesComboBox("select NPM.ID, NPM.NAME_BUL from  N_PAYMENT_METHODS NPM", jcbPaymentType, false, -1, false);
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     private void setValuesArticles() {
-            switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
-                case 1: {
-                    String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_DE) NAME_DE from ARTICLES A "
-                                + "where A.ARTICLE_GROUPS_ID = " + 
-                            (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
-                    setValuesComboBox(sql, jcbArticle, true, -1, false);
-                    break;
-                }
-                case 2: {
-                    String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_EN) NAME_DE from ARTICLES A "
-                                + "where A.ARTICLE_GROUPS_ID = " + 
-                            (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
-                    setValuesComboBox(sql, jcbArticle, true, -1, false);
-                    break;
-                }
-                case 3: {
-                    String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_BG) NAME_DE from ARTICLES A "
-                                + "where A.ARTICLE_GROUPS_ID = " + 
-                            (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
-                    setValuesComboBox(sql, jcbArticle, true, -1, false);
-                    break;
-                }
-                default:
-                    break;
+        switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
+            case 1: {
+                String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_DE) NAME_DE from ARTICLES A "
+                        + "where A.ACTIVE_YN = 1 and A.ARTICLE_GROUPS_ID = "
+                        + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                setValuesComboBox(sql, jcbArticle, true, -1, false);
+                break;
             }
+            case 2: {
+                String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_EN) NAME_DE from ARTICLES A "
+                        + "where A.ACTIVE_YN = 1 and A.ARTICLE_GROUPS_ID = "
+                        + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                setValuesComboBox(sql, jcbArticle, true, -1, false);
+                break;
+            }
+            case 3: {
+                String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_BG) NAME_DE from ARTICLES A "
+                        + "where A.ACTIVE_YN = 1 and A.ARTICLE_GROUPS_ID = "
+                        + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                setValuesComboBox(sql, jcbArticle, true, -1, false);
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     private void setValuesPayment() {
-            switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
-                case 1: {
-                    setValuesComboBox("select NPM.ID, NPM.NAME_GERM from  N_PAYMENT_METHODS NPM", jcbPayment, false, -1, false);
-                    break;
-                }
-                case 2: {
-                    setValuesComboBox("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM", jcbPayment, false, -1, false);
-                    break;
-                }
-                case 3: {
-                    setValuesComboBox("select NPM.ID, NPM.NAME_BUL from  N_PAYMENT_METHODS NPM", jcbPayment, false, -1, false);
-                    break;
-                }
-                default:
-                    break;
+        switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
+            case 1: {
+                setValuesComboBox("select NPM.ID, NPM.NAME_GERM from  N_PAYMENT_METHODS NPM", jcbPayment, false, -1, false);
+                break;
             }
+            case 2: {
+                setValuesComboBox("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM", jcbPayment, false, -1, false);
+                break;
+            }
+            case 3: {
+                setValuesComboBox("select NPM.ID, NPM.NAME_BUL from  N_PAYMENT_METHODS NPM", jcbPayment, false, -1, false);
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     private void getSum() {
@@ -1327,23 +1329,23 @@ public class Delivery extends javax.swing.JFrame {
         jcbArticleGroups.removeAllItems();
         jcbArticle.setSelectedIndex(-1);
         jcbArticleGroups.setSelectedIndex(-1);
-            switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
-                case 1: {
-                    setValuesComboBox("select AG.ID, AG.NAME_DE from ARTICLE_GROUPS AG ", jcbArticleGroups, true, -1, false);
-                    break;
-                }
-                case 2: {
-                    setValuesComboBox("select AG.ID, AG.NAME_EN from ARTICLE_GROUPS AG ", jcbArticleGroups, true, -1, false);
-                    break;
-                }
-                case 3: {
-                    setValuesComboBox("select AG.ID, AG.NAME_BG from ARTICLE_GROUPS AG ", jcbArticleGroups, true, -1, false);
-                    break;
-                }
-                default:
-                    break;
+        switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
+            case 1: {
+                setValuesComboBox("select AG.ID, AG.NAME_DE from ARTICLE_GROUPS AG ", jcbArticleGroups, true, -1, false);
+                break;
             }
-            setValuesPayment();
+            case 2: {
+                setValuesComboBox("select AG.ID, AG.NAME_EN from ARTICLE_GROUPS AG ", jcbArticleGroups, true, -1, false);
+                break;
+            }
+            case 3: {
+                setValuesComboBox("select AG.ID, AG.NAME_BG from ARTICLE_GROUPS AG ", jcbArticleGroups, true, -1, false);
+                break;
+            }
+            default:
+                break;
+        }
+        setValuesPayment();
         jcbLang.setBackground(Color.red);
     }//GEN-LAST:event_jcbLangActionPerformed
 
@@ -1506,7 +1508,7 @@ public class Delivery extends javax.swing.JFrame {
         jtxtVatValue.setText("");
         jtxtTotalWoVat.setText("");
         jtxtTotalWithVat.setText("");
-        if (jcbDealType.getSelectedIndex() != -1) {  
+        if (jcbDealType.getSelectedIndex() != -1) {
             int Accuring = 0;
             try {
                 Connection con = getConnection();
@@ -1529,16 +1531,16 @@ public class Delivery extends javax.swing.JFrame {
     }//GEN-LAST:event_jcbDealTypeActionPerformed
 
     private void jbtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveActionPerformed
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            if (checkInputs()) {
-                JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
-            } else if (model.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "Моля Добавете поне един артикул в таблицата!");
-            } else {
-                InsertMaster();
-                InsertLots();
-                InsertDetail();
-            }
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        if (checkInputs()) {
+            JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
+        } else if (model.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Моля Добавете поне един артикул в таблицата!");
+        } else {
+            InsertMaster();
+            InsertLots();
+            InsertDetail();
+        }
     }//GEN-LAST:event_jbtnSaveActionPerformed
 
     private void jtbnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtbnPrintActionPerformed
@@ -1570,48 +1572,78 @@ public class Delivery extends javax.swing.JFrame {
                     String invoiceNumber = number.substring(0, number.indexOf("/"));
                     switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
                         case 1: {
-                            JasperReport jr = (JasperReport) JRLoader.loadObject(this.getClass().getResource("InvoiceDE_A4.jasper"));
-                            JasperReport sub = (JasperReport) JRLoader.loadObject(this.getClass().getResource("Blank_A4.jasper"));
                             Connection con = getConnection();
-                            HashMap param = new HashMap();
-                            param.put("DEAL_ID", Long.valueOf(deliveryID));
-                            param.put("Sub1", sub);
-                            JasperPrint jp = JasperFillManager.fillReport(jr, param, con);
-                            JasperViewer.viewReport(jp, false);
+                            PreparedStatement ps = con.prepareStatement("select\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 9 order by R.ID) MAIN_REPORT,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 10 order by R.ID) SUBREPORT\n"
+                                    + "from\n"
+                                    + "  RDB$DATABASE");
+                            ResultSet rs = ps.executeQuery();
+                            while (rs.next()) {
+                                InputStream fileMain = rs.getBinaryStream("MAIN_REPORT");
+                                InputStream fileSub = rs.getBinaryStream("SUBREPORT");
+                                JasperReport jr = (JasperReport) JRLoader.loadObject(fileMain);
+                                JasperReport sub = (JasperReport) JRLoader.loadObject(fileSub);
+                                HashMap param = new HashMap();
+                                param.put("DEAL_ID", Long.valueOf(deliveryID));
+                                param.put("Sub1", sub);
+                                JasperPrint jp = JasperFillManager.fillReport(jr, param, con);
+                                JasperViewer.viewReport(jp, false);
 
-                            File directory = new File(".");
-                            String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
-                            JasperExportManager.exportReportToPdfFile(jp, absolutePath + "Invoices\\Delivery " + invoiceNumber + ".pdf");
+                                File directory = new File(".");
+                                String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
+                                JasperExportManager.exportReportToPdfFile(jp, absolutePath + "Invoices\\Delivery " + invoiceNumber + ".pdf");
+                            }
                             break;
                         }
                         case 2: {
-                            JasperReport jr = (JasperReport) JRLoader.loadObject(this.getClass().getResource("InvoiceEN_A4.jasper"));
-                            JasperReport sub = (JasperReport) JRLoader.loadObject(this.getClass().getResource("BlankEN_A4.jasper"));
                             Connection con = getConnection();
-                            HashMap param = new HashMap();
-                            param.put("DEAL_ID", Long.valueOf(deliveryID));
-                            param.put("Sub1", sub);
-                            JasperPrint jp = JasperFillManager.fillReport(jr, param, con);
-                            JasperViewer.viewReport(jp, false);
+                            PreparedStatement ps = con.prepareStatement("select\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 7 order by R.ID) MAIN_REPORT,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 8 order by R.ID) SUBREPORT\n"
+                                    + "from\n"
+                                    + "  RDB$DATABASE");
+                            ResultSet rs = ps.executeQuery();
+                            while (rs.next()) {
+                                InputStream fileMain = rs.getBinaryStream("MAIN_REPORT");
+                                InputStream fileSub = rs.getBinaryStream("SUBREPORT");
+                                JasperReport jr = (JasperReport) JRLoader.loadObject(fileMain);
+                                JasperReport sub = (JasperReport) JRLoader.loadObject(fileSub);
+                                HashMap param = new HashMap();
+                                param.put("DEAL_ID", Long.valueOf(deliveryID));
+                                param.put("Sub1", sub);
+                                JasperPrint jp = JasperFillManager.fillReport(jr, param, con);
+                                JasperViewer.viewReport(jp, false);
 
-                            File directory = new File(".");
-                            String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
-                            JasperExportManager.exportReportToPdfFile(jp, absolutePath + "Invoices\\Delivery " + invoiceNumber + ".pdf");
+                                File directory = new File(".");
+                                String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
+                                JasperExportManager.exportReportToPdfFile(jp, absolutePath + "Invoices\\Delivery " + invoiceNumber + ".pdf");
+                            }
                             break;
                         }
                         case 3: {
-                            JasperReport jr = (JasperReport) JRLoader.loadObject(this.getClass().getResource("InvoiceBG_A4.jasper"));
-                            JasperReport sub = (JasperReport) JRLoader.loadObject(this.getClass().getResource("BlankBG_A4.jasper"));
                             Connection con = getConnection();
-                            HashMap param = new HashMap();
-                            param.put("DEAL_ID", Long.valueOf(deliveryID));
-                            param.put("Sub1", sub);
-                            JasperPrint jp = JasperFillManager.fillReport(jr, param, con);
-                            JasperViewer.viewReport(jp, false);
+                            PreparedStatement ps = con.prepareStatement("select\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 11 order by R.ID) MAIN_REPORT,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 12 order by R.ID) SUBREPORT\n"
+                                    + "from\n"
+                                    + "  RDB$DATABASE");
+                            ResultSet rs = ps.executeQuery();
+                            while (rs.next()) {
+                                InputStream fileMain = rs.getBinaryStream("MAIN_REPORT");
+                                InputStream fileSub = rs.getBinaryStream("SUBREPORT");
+                                JasperReport jr = (JasperReport) JRLoader.loadObject(fileMain);
+                                JasperReport sub = (JasperReport) JRLoader.loadObject(fileSub);
+                                HashMap param = new HashMap();
+                                param.put("DEAL_ID", Long.valueOf(deliveryID));
+                                param.put("Sub1", sub);
+                                JasperPrint jp = JasperFillManager.fillReport(jr, param, con);
+                                JasperViewer.viewReport(jp, false);
 
-                            File directory = new File(".");
-                            String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
-                            JasperExportManager.exportReportToPdfFile(jp, absolutePath + "Invoices\\Delivery " + invoiceNumber + ".pdf");
+                                File directory = new File(".");
+                                String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
+                                JasperExportManager.exportReportToPdfFile(jp, absolutePath + "Invoices\\Delivery " + invoiceNumber + ".pdf");
+                            }
                             break;
                         }
                         default:
@@ -1620,6 +1652,8 @@ public class Delivery extends javax.swing.JFrame {
                 } catch (JRException e) {
                     Logger.getLogger(Delivery.class.getName()).log(Level.SEVERE, null, e);
                     JOptionPane.showMessageDialog(this, "Възникна грешка при печат на фактура, моля проверете данните и опитайте отново!");
+                } catch (SQLException ex) {
+                    Logger.getLogger(Delivery.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

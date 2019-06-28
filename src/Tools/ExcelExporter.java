@@ -21,7 +21,7 @@ public class ExcelExporter {
 
     public static boolean ExcelExport(JTable table, String fileName) {
         System.setProperty("file.encoding", "UTF-8");
-       try {
+        try {
             File file = new File(fileName + ".xls");
             WritableWorkbook workbook1 = Workbook.createWorkbook(file);
             WritableSheet sheet1 = workbook1.createSheet("Sheet", 0);
