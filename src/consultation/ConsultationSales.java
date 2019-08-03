@@ -32,6 +32,7 @@ import javax.swing.table.TableColumn;
 import static Tools.getConnection.getConnection;
 import Tools.DropDown;
 import static Tools.ExcelExporter.ExcelExport;
+import static Tools.GetSQL.getSQL;
 import static Tools.setValuesComboBox.setValuesComboBox;
 import sale.SALE;
 
@@ -76,22 +77,8 @@ public class ConsultationSales extends javax.swing.JFrame {
         Connection con = getConnection();
         java.sql.Date sqldateFrom = new java.sql.Date(jdFromDate.getDate().getTime());
         java.sql.Date sqldateTo = new java.sql.Date(jdToDate.getDate().getTime());
-        PreparedStatement ps = con.prepareStatement("select\n"
-                + "  D.DEAL_NUMBER, I.INVOICE_NUMBER, D.DEAL_DATE, C.NAME CLIENT, CC.NAME COUNTRY, CH.NAME CHANNEL,\n"
-                + "  PM.NAME_ENG PAYMENTS, DT.NAME DEAL_TYPE, D.DEAL_VALUE, D.VALUE_VAT\n"
-                + "from\n"
-                + "   DEALS D\n"
-                + "   left join INVOICES I on I.DEAL_ID = D.ID\n"
-                + "   join CLIENTS C on C.ID = D.CLIENT_ID\n"
-                + "   join N_COUNTRIES CC on CC.ID = C.COUNTRY_ID\n"
-                + "   join N_CHANNELS CH on CH.ID = D.CHANNEL_ID\n"
-                + "   left join N_PAYMENT_METHODS PM on PM.ID = I.PAYMENT_ID\n"
-                + "   join N_DEAL_TYPES DT on DT.ID = D.DEAL_TYPE_ID\n"
-                + "where\n"
-                + "(D.OPERATION_ID = ?) and D.DEAL_DATE between ? and ? and \n"
-                + "  D.CHANNEL_ID = iif(cast(? as DM_REF) = -1 , D.CHANNEL_ID , cast(? as DM_REF)) and\n"
-                + "  I.PAYMENT_ID is not distinct from iif(cast(? as DM_REF) = -1 , I.PAYMENT_ID , cast(? as DM_REF)) and\n"
-                + "  D.DEAL_TYPE_ID = iif(cast(? as DM_REF) = -1 , D.DEAL_TYPE_ID , cast(? as DM_REF)) ");
+        String sql = getSQL(6);
+        PreparedStatement ps = con.prepareStatement(sql);
 
         ps.setInt(1, Type);
         ps.setDate(2, sqldateFrom);

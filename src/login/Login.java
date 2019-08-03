@@ -188,8 +188,12 @@ public class Login extends javax.swing.JFrame {
         PreparedStatement ps;
         try {
             connection = getConnection();
-            ps = connection.prepareStatement("SELECT U.ID, U.USERNAME, U.PASSWORD, U.USER_TYPE FROM USERS U "
-                    + "WHERE username = ? AND password = ?");
+            ps = connection.prepareStatement("select\n"
+                    + "  U.ID, U.USERNAME, U.PASSWORD, U.USER_TYPE\n"
+                    + "FROM\n"
+                    + "  USERS U\n"
+                    + "WHERE\n"
+                    + "  U.USERNAME = ? and U.PASSWORD = hash(cast(? as DM_STRING20))");
             ps.setString(1, jtxtUserName.getText());
             ps.setString(2, String.valueOf(jTxtPassword.getPassword()));
             ResultSet rs = ps.executeQuery();

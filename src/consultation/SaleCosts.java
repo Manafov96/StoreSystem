@@ -6,6 +6,7 @@
 package consultation;
 
 import static Tools.ExcelExporter.ExcelExport;
+import static Tools.GetSQL.getSQL;
 import java.awt.Font;
 import java.io.File;
 import java.sql.Connection;
@@ -73,15 +74,8 @@ public class SaleCosts extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
             Connection con = getConnection();
-            PreparedStatement ps = con.prepareStatement("select\n"
-                    + "  D.DEAL_NUMBER, I.INVOICE_NUMBER, D.DEAL_DATE,\n"
-                    + "  D.TRANSPORT_COSTS, D.CHANNEL_COSTS, D.BANK_COSTS, D.OTHER_COSTS,\n"
-                    + "  (D.TRANSPORT_COSTS + D.CHANNEL_COSTS + D.BANK_COSTS + D.OTHER_COSTS) TOTAL\n"
-                    + "from\n"
-                    + "  DEALS D\n"
-                    + "  left join INVOICES I on D.ID = I.DEAL_ID\n"
-                    + "where\n"
-                    + "  D.OPERATION_ID = ? and D.DEAL_DATE between ? and ?");
+            String sql = getSQL(2);
+            PreparedStatement ps = con.prepareStatement(sql);
             java.sql.Date sqldateFrom = new java.sql.Date(jdFromDate.getDate().getTime());
             java.sql.Date sqldateTo = new java.sql.Date(jdToDate.getDate().getTime());
             int costsType = 1;

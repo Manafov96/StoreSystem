@@ -2003,6 +2003,7 @@ public class SALE extends javax.swing.JFrame {
             try {
                 NumberFormat nfm = NumberFormat.getInstance(Locale.getDefault());
                 String formattedText = nfm.format(Integer.parseInt(jtxtSaleNumber.getText()));
+                formattedText = formattedText.replace("\u00A0", "");
                 jtxtSaleNumber.setText(formattedText);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Грешен формат!");

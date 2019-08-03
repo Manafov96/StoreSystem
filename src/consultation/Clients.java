@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import static Tools.getConnection.getConnection;
 import Tools.DropDown;
+import static Tools.GetSQL.getSQL;
 
 /**
  *
@@ -50,20 +51,8 @@ public class Clients extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
             Connection con = getConnection();
-            PreparedStatement ps = con.prepareStatement("select\n"
-                    + "  C.ID, iif(C.PERSON = 1, 'Частно лице', 'Фирма') IS_PERSON,\n"
-                    + "  C.NAME CLIENT_NAME,\n"
-                    + "  CO.NAME COUNTRY,\n"
-                    + "  C.CITY CITY,\n"
-                    + "  C.ADDRESS,\n"
-                    + "  C.VAT_NUMBER,\n"
-                    + "  C.MOL\n"
-                    + "from\n"
-                    + "  CLIENTS C\n"
-                    + "  join N_COUNTRIES CO on CO.ID = C.COUNTRY_ID\n"
-                    + "where\n"
-                    + "  C.TYPE_ID = 1"
-                    + "                                   ");
+            String sql = getSQL(5);
+            PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ID = rs.getInt("ID");

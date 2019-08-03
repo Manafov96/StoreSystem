@@ -26,6 +26,7 @@ import javax.swing.table.TableColumn;
 import static Tools.getConnection.getConnection;
 import Tools.DropDown;
 import static Tools.ExcelExporter.ExcelExport;
+import static Tools.GetSQL.getSQL;
 import static Tools.setValuesComboBox.setValuesComboBox;
 
 /**
@@ -71,26 +72,8 @@ public class ConsultationArticles extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
             Connection con = getConnection();
-            PreparedStatement ps = con.prepareStatement("select\n"
-                    + "  A.CODE, AG.NAME_BG GROUPS, A.NAME_BG ARTICLE, cast(T.QUANTITY as DM_INTEGER) QTY, T.TOTAL\n"
-                    + "from\n"
-                    + "  (\n"
-                    + "    select\n"
-                    + "      DD.ARTICLE_ID, sum(DD.QUANTITY) QUANTITY, cast(sum(DD.DVY_PRICE_WITH_VAT * DD.QUANTITY) as DM_DOUBLE) TOTAL\n"
-                    + "    from\n"
-                    + "      DEALS D\n"
-                    + "      join DEAL_DETAILS DD on D.ID = DD.DEAL_ID\n"
-                    + "    where\n"
-                    + "      D.DEAL_DATE between ? and ? and\n"
-                    + "      DD.ARTICLE_ID <> 2 and D.OPERATION_ID = ?\n"
-                    + "    group by\n"
-                    + "      DD.ARTICLE_ID\n"
-                    + "   )T\n"
-                    + "   join ARTICLES A on A.ID = T.ARTICLE_ID\n"
-                    + "   join ARTICLE_GROUPS AG on AG.ID = A.ARTICLE_GROUPS_ID\n"
-                    + "where\n"
-                    + "    A.ID = iif(cast(? as DM_REF) = -1 , A.ID , cast(? as DM_REF)) and\n"
-                    + "    A.ARTICLE_GROUPS_ID = iif(cast(? as DM_REF) = -1, A.ARTICLE_GROUPS_ID, cast(? as DM_REF))");
+            String sql = getSQL(8);
+            PreparedStatement ps = con.prepareStatement(sql);
             java.sql.Date sqldateFrom = new java.sql.Date(jdFromDate.getDate().getTime());
             java.sql.Date sqldateTo = new java.sql.Date(jdToDate.getDate().getTime());
             ps.setDate(1, sqldateFrom);

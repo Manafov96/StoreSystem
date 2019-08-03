@@ -25,6 +25,7 @@ import javax.swing.table.TableColumn;
 import static Tools.getConnection.getConnection;
 import Tools.DropDown;
 import static Tools.ExcelExporter.ExcelExport;
+import static Tools.GetSQL.getSQL;
 import static Tools.setValuesComboBox.setValuesComboBox;
 
 /**
@@ -67,11 +68,9 @@ public class ConsultationTurnover extends javax.swing.JFrame {
         setValuesComboBox(sql, jcbArticles, false, 0, true);
         
     }
-
     private void Show_Turnover() {
         try {
             String invoiceNumber = null;
-            //String invoiceDate = null;
             String code = null;
             String article = null;
             Double salePrice = null;
@@ -84,34 +83,8 @@ public class ConsultationTurnover extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) jTable.getModel();
             model.setRowCount(0);
             Connection con = getConnection();
-            PreparedStatement ps = con.prepareStatement("select\n"
-                    + "  T.INVOICE_NUMBER, T.INVOICE_DATE, T.CODE, T.NAME_DE, T.DVY_PRICE_WITH_VAT,\n"
-                    + "  T.QTY, T.TOTAL, T.DELIVERY_PRICE, (T.QTY * T.DELIVERY_PRICE) TOTAL_DELIVERY_PRICE,\n"
-                    + "  T.VAT,\n"
-                    + "  (T.DVY_PRICE_WITH_VAT * T.QTY) - T.VAT - (T.QTY * T.DELIVERY_PRICE) PROFIT\n"
-                    + "from\n"
-                    + "  (\n"
-                    + "  select\n"
-                    + "    I.INVOICE_NUMBER, I.INVOICE_DATE, A.CODE, A.NAME_BG NAME_DE, DD.DVY_PRICE_WITH_VAT,\n"
-                    + "    cast(DD.QUANTITY as DM_INTEGER) QTY,\n"
-                    + "    cast((DD.DVY_PRICE_WITH_VAT * DD.QUANTITY) as DM_DOUBLE) TOTAL,\n"
-                    + "    (select first 1 DDP.REAL_PRICE from DEAL_DETAILS DDP where\n"
-                    + "    DDP.LOT_ID = DD.LOT_ID and DDP.ARTICLE_ID = DD.ARTICLE_ID and DDP.REAL_PRICE is not null) DELIVERY_PRICE,\n"
-                    + "    iif(D.DEAL_TYPE_ID in (1,2),\n"
-                    + "    cast(((DD.DVY_PRICE_WITH_VAT * DD.QUANTITY) * MC.VAT_PERCENTAGE / (100 + MC.VAT_PERCENTAGE)) as DM_DOUBLE), 0) VAT\n"
-                    + "  from\n"
-                    + "    DEALS D\n"
-                    + "    join DEAL_DETAILS DD on D.ID = DD.DEAL_ID\n"
-                    + "    join INVOICES I on I.DEAL_ID = D.ID\n"
-                    + "    join ARTICLES A on A.ID = DD.ARTICLE_ID\n"
-                    + "    join MY_COMPANY MC on (0 = 0)\n"
-                    + "  where\n"
-                    + "    D.OPERATION_ID = 1 and I.INVOICE_DATE between ? and ? and\n"
-                    + "    A.ID = iif(cast(? as DM_REF) = -1 , A.ID , cast(? as DM_REF)) and\n "
-                    + "    A.ARTICLE_GROUPS_ID = iif(cast(? as DM_REF) = -1 , ARTICLE_GROUPS_ID , cast(? as DM_REF))"
-                    + "  order by\n"
-                    + "    I.ID\n"
-                    + "  )T ");
+            String sql = getSQL(1);
+            PreparedStatement ps = con.prepareStatement(sql);
             java.sql.Date sqldateFrom = new java.sql.Date(jdFromDate.getDate().getTime());
             java.sql.Date sqldateTo = new java.sql.Date(jdToDate.getDate().getTime());
             ps.setDate(1, sqldateFrom);
@@ -125,7 +98,6 @@ public class ConsultationTurnover extends javax.swing.JFrame {
             while (rs.next()) {
 
                 invoiceNumber = rs.getString("INVOICE_NUMBER");
-                // invoiceDate = rs.getString("INVOICE_DATE");
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String saleDate = dateFormat.format(rs.getDate("INVOICE_DATE"));
                 code = rs.getString("CODE");
@@ -138,7 +110,7 @@ public class ConsultationTurnover extends javax.swing.JFrame {
                 totalDvyPrice = rs.getDouble("TOTAL_DELIVERY_PRICE");
                 Profit = rs.getDouble("PROFIT");
                 model.addRow(new Object[]{number, invoiceNumber, saleDate, code, article, qty, salePrice, Total, Vat,
-                    dvyPrice, totalDvyPrice, Profit});
+                             dvyPrice, totalDvyPrice, Profit});
                 number += 1;
             }
         } catch (SQLException e) {

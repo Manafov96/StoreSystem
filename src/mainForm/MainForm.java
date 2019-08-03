@@ -38,6 +38,7 @@ import sale.SALE;
 import settings.Countries;
 import login.Login;
 import static Tools.getConnection.getConnection;
+import consultation.SQLconsole;
 import settings.Channels;
 import settings.DealTypes;
 import settings.Generator;
@@ -131,6 +132,7 @@ public class MainForm extends javax.swing.JFrame {
         jmiMoney = new javax.swing.JMenuItem();
         jmiReversal = new javax.swing.JMenuItem();
         jmiClientsReport = new javax.swing.JMenuItem();
+        jmCustomConsultation = new javax.swing.JMenuItem();
         jmSettings = new javax.swing.JMenu();
         jmiArticles = new javax.swing.JMenuItem();
         jmiClients = new javax.swing.JMenuItem();
@@ -448,6 +450,15 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         jmReports.add(jmiClientsReport);
+
+        jmCustomConsultation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/report32.png"))); // NOI18N
+        jmCustomConsultation.setText("SQL конзола");
+        jmCustomConsultation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmCustomConsultationActionPerformed(evt);
+            }
+        });
+        jmReports.add(jmCustomConsultation);
 
         jMenuBar1.add(jmReports);
 
@@ -877,6 +888,11 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_onExit
 
+    private void jmCustomConsultationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmCustomConsultationActionPerformed
+       SQLconsole console = new SQLconsole();
+       console.setVisible(true);
+    }//GEN-LAST:event_jmCustomConsultationActionPerformed
+
 /**
  * @param args the command line arguments
  */
@@ -939,6 +955,7 @@ public static void main(String args[]) {
     private javax.swing.JButton jbtnFastDelivery;
     public javax.swing.JButton jbtnFastFirm;
     private javax.swing.JButton jbtnFastSale;
+    private javax.swing.JMenuItem jmCustomConsultation;
     private javax.swing.JMenu jmDelivery;
     private javax.swing.JMenu jmOperaction;
     public javax.swing.JMenu jmReports;

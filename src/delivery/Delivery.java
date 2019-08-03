@@ -1853,6 +1853,7 @@ public class Delivery extends javax.swing.JFrame {
             try {
                 NumberFormat nfm = NumberFormat.getInstance(Locale.getDefault());
                 String formattedText = nfm.format(Integer.parseInt(jtxtDeliveryNumber.getText()));
+                formattedText = formattedText.replace("\u00A0", "");
                 jtxtDeliveryNumber.setText(formattedText);
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Грешен формат!");

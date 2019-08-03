@@ -5,6 +5,7 @@
  */
 package consultation;
 
+import static Tools.GetSQL.getSQL;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -48,21 +49,8 @@ public class ForDelivery extends javax.swing.JFrame {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
             Connection con = getConnection();
-            PreparedStatement ps = con.prepareStatement("select\n"
-                    + "  T.GROUPS ARTICLES_GROUPS, T.CODE, T.ARTICLE, cast(T.QTY as DM_INTEGER) QTY, T.MIN_QTY, T.MEASURE\n"
-                    + "from\n"
-                    + "  (\n"
-                    + "  select\n"
-                    + "    AG.NAME_BG GROUPS, A.CODE, A.NAME_BG ARTICLE, AV.QTY, A.MIN_QUANTITY MIN_QTY,\n"
-                    + "    M.NAME_BG MEASURE\n"
-                    + "  from\n"
-                    + "    AVAILABILITY_VIEW AV\n"
-                    + "    join ARTICLES A on A.ID = AV.ID\n"
-                    + "    join ARTICLE_GROUPS AG on AG.ID = AV.ARTICLE_GROUPS_ID\n"
-                    + "    join N_MEASURES M on M.ID = A.MEASURE_ID\n"
-                    + "  )T\n"
-                    + "where\n"
-                    + "  T.QTY <= T.MIN_QTY");
+            String sql = getSQL(4);
+            PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 group = rs.getString("ARTICLES_GROUPS");
