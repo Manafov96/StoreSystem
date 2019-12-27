@@ -5,9 +5,15 @@
  */
 package consultation;
 
+import Tools.DropDown;
+import Tools.ExcelExporter;
+import static Tools.ExcelExporter.ExcelExport;
+import static Tools.GetSQL.getSQL;
+import static Tools.getConnection.getConnection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,30 +31,25 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import static Tools.getConnection.getConnection;
-import Tools.DropDown;
-import static Tools.ExcelExporter.ExcelExport;
-import static Tools.GetSQL.getSQL;
-import static Tools.setValuesComboBox.setValuesComboBox;
-import javax.swing.JSpinner;
 import sale.SALE;
 
 /**
  *
  * @author Viko
  */
-public class ConsultationSales extends javax.swing.JFrame {
+public class ConsultationCreditNotes extends javax.swing.JFrame {
 
     public int Type = 1; // for type of report
 
     /**
      * Creates new form ConsultationSales
      */
-    public ConsultationSales() {
+    public ConsultationCreditNotes() {
         initComponents();
         Date date = new Date();
         jdFromDate.setDate(date);
@@ -62,14 +63,70 @@ public class ConsultationSales extends javax.swing.JFrame {
         TableColumn ValueVat = jTable1.getColumnModel().getColumn(9);
         dealValue.setCellRenderer(new DecimalFormatRenderer());
         ValueVat.setCellRenderer(new DecimalFormatRenderer());
-        // set comboBox Channels
-        setValuesComboBox("select NC.ID, NC.NAME CHANNELS from N_CHANNELS NC", jcbChannels, false, 0, true);
-        // set comboBox Payments
-        setValuesComboBox("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM", jcbPayment, false, 0, true);
-        // set comboBox DealType
-        setValuesComboBox("select DT.ID, DT.NAME DEAL_TYPE from N_DEAL_TYPES DT", jcbDealType, false, 0, true);
+        setValuesChannelType();
+        setValuesPayment();
+        setValuesDealType();
         jTable1.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
 
+    }
+
+    private void setValuesChannelType() {
+        try {
+
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("select NC.ID, NC.NAME CHANNELS from N_CHANNELS NC");
+            ResultSet rs = ps.executeQuery();
+            jcbChannels.removeAllItems();
+            Vector<DropDown> vector = new Vector<>();
+            vector.addElement(new DropDown(-1, "Всички"));
+            while (rs.next()) {
+                vector.addElement(new DropDown(rs.getInt(1), rs.getString(2)));
+            }
+            jcbChannels.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        jcbChannels.setSelectedIndex(0);
+    }
+
+    private void setValuesPayment() {
+        try {
+
+            Connection con = getConnection();
+
+            PreparedStatement ps = con.prepareStatement("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM");
+            ResultSet rs = ps.executeQuery();
+            jcbPayment.removeAllItems();
+            Vector<DropDown> vector = new Vector<>();
+            vector.addElement(new DropDown(-1, "Всички"));
+            while (rs.next()) {
+                vector.addElement(new DropDown(rs.getInt(1), rs.getString(2)));
+
+            }
+            jcbPayment.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        jcbPayment.setSelectedIndex(0);
+    }
+
+    private void setValuesDealType() {
+        try {
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("select DT.ID, DT.NAME DEAL_TYPE from N_DEAL_TYPES DT");
+            ResultSet rs = ps.executeQuery();
+            jcbDealType.removeAllItems();
+            Vector<DropDown> vector = new Vector<>();
+            vector.addElement(new DropDown(-1, "Всички"));
+
+            while (rs.next()) {
+                vector.addElement(new DropDown(rs.getInt(1), rs.getString(2)));
+            }
+            jcbDealType.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        jcbDealType.setSelectedIndex(0);
     }
 
     SALE sale = new SALE();
@@ -79,8 +136,23 @@ public class ConsultationSales extends javax.swing.JFrame {
         Connection con = getConnection();
         java.sql.Date sqldateFrom = new java.sql.Date(jdFromDate.getDate().getTime());
         java.sql.Date sqldateTo = new java.sql.Date(jdToDate.getDate().getTime());
-        String sql = getSQL(6);
-        PreparedStatement ps = con.prepareStatement(sql);
+        PreparedStatement ps = con.prepareStatement("select\n"
+                + "  D.DEAL_NUMBER, I.INVOICE_NUMBER, D.DEAL_DATE, C.NAME CLIENT, CC.NAME COUNTRY, CH.NAME CHANNEL,\n"
+                + "  PM.NAME_ENG PAYMENTS, DT.NAME DEAL_TYPE, D.DEAL_VALUE, D.VALUE_VAT, D.CREDIT_DEAL_NUMBER\n"
+                + "from\n"
+                + "   DEALS D\n"
+                + "   left join INVOICES I on I.DEAL_ID = D.ID\n"
+                + "   join CLIENTS C on C.ID = D.CLIENT_ID\n"
+                + "   join N_COUNTRIES CC on CC.ID = C.COUNTRY_ID\n"
+                + "   join N_CHANNELS CH on CH.ID = D.CHANNEL_ID\n"
+                + "   left join N_PAYMENT_METHODS PM on PM.ID = I.PAYMENT_ID\n"
+                + "   join N_DEAL_TYPES DT on DT.ID = D.DEAL_TYPE_ID\n"
+                + "where\n"
+                + "(D.OPERATION_ID = ?) and D.DEAL_DATE between ? and ? and \n"
+                + "  D.CHANNEL_ID = iif(cast(? as DM_REF) = -1 , D.CHANNEL_ID , cast(? as DM_REF)) and\n"
+                + "  I.PAYMENT_ID is not distinct from iif(cast(? as DM_REF) = -1 , I.PAYMENT_ID , cast(? as DM_REF)) and\n"
+                + "  D.DEAL_TYPE_ID = iif(cast(? as DM_REF) = -1 , D.DEAL_TYPE_ID , cast(? as DM_REF)) "
+                + "order by D.ID");
 
         ps.setInt(1, Type);
         ps.setDate(2, sqldateFrom);
@@ -106,7 +178,7 @@ public class ConsultationSales extends javax.swing.JFrame {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationCreditNotes.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return salesList;
@@ -136,39 +208,25 @@ public class ConsultationSales extends javax.swing.JFrame {
     }
 
     private void showMaster() {
-        sale.jtxtSaleNumber.setBackground(Color.white);
+        sale.jlbSale.setText("Сторнирана продажба");
+        sale.setTitle("Сторнирана продажба");
+        sale.jlbInvoiceNumbers.setText("Номер и дата на КИ:");
+        sale.isCreditNote = 1;
+        sale.jxtCredit.setVisible(true);
+        sale.jdtchCredit.setVisible(true);
+        sale.jlbCredit.setVisible(true);
+        sale.jlbCreditDate.setVisible(true);
+        //sale.jbntInvoice.setEnabled(false);
+        sale.jbntInvoice.setText("КИ");
+        sale.jxtCredit.setBackground(Color.CYAN);
         try {
             Connection con = getConnection();
             int row = jTable1.getSelectedRow();
             int correctModel = jTable1.convertRowIndexToModel(row);
-
-            PreparedStatement ps = con.prepareStatement("select\n"
-                    + " D.ID, D.DEAL_NUMBER, D.DEAL_DATE, D.OPERATION_ID, O.NAME OPERATION,\n"
-                    + " D.DEAL_TYPE_ID, DT.NAME DEAL_TYPE, D.CREDIT_DEAL_NUMBER, D.CREDIT_DEAL_DATE,\n"
-                    + " D.CHANNEL_ID, C.NAME CHANNEL, D.STATUS_ID, S.NAME STATUS, D.CLIENT_ID, CC.NAME CLIENT,\n"
-                    + " D.LANG_ID LANG_ID, L.SHORT_NAME LANG, D.DEAL_VALUE,\n"
-                    + " D.TRANSPORT_COSTS, D.CHANNEL_COSTS, D.BANK_COSTS, D.OTHER_COSTS, I.INVOICE_NUMBER, I.PAYMENT_ID, I.PAYMENT_TEXT,\n"
-                    + " CN.ID CREDIT_ID, CN.CR_NOTE_NUMBER, CN.CR_NOTE_DATE, CN.CR_NOTE_TEXT,\n"
-                    + " case\n"
-                    + "    when L.ID = 1 then P.NAME_GERM\n"
-                    + "    when L.ID = 2 then P.NAME_ENG\n"
-                    + "    when L.ID = 3 then P.NAME_BUL\n"
-                    + " end PAYMENT,\n"
-                    + " iif(DT.ACCRUING_VAT = 1, (select MC.VAT_PERCENTAGE from MY_COMPANY MC), 0) VAT_PCT\n"
-                    + " from\n"
-                    + "  DEALS D\n"
-                    + "  join N_OPERATIONS O on O.ID = D.OPERATION_ID\n"
-                    + "  join N_DEAL_TYPES DT on DT.ID = D.DEAL_TYPE_ID\n"
-                    + "  join N_CHANNELS C on C.ID = D.CHANNEL_ID\n"
-                    + "  join N_STATUSES S on S.ID = D.STATUS_ID\n"
-                    + "  join CLIENTS CC on CC.ID = D.CLIENT_ID\n"
-                    + "  join N_LANGS L on L.ID = D.LANG_ID\n"
-                    + "  left join INVOICES I on I.DEAL_ID = D.ID\n"
-                    + "  left join N_PAYMENT_METHODS P on P.ID = I.PAYMENT_ID\n"
-                    + "  left join CREDIT_NOTES CN on CN.ID = I.CREDIT_NOTE_ID\n"
-                    + " where\n"
-                    + "  (D.OPERATION_ID = ? or D.OPERATION_ID = 6) and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0));
+            String sql = getSQL(9);
+            PreparedStatement ps = con.prepareStatement(sql); 
             ps.setInt(1, Type);
+            ps.setObject(2, jTable1.getModel().getValueAt(correctModel, 0));
             ResultSet rs = ps.executeQuery();
             Vector<DropDown> dealType = new Vector<>();
             Vector<DropDown> channel = new Vector<>();
@@ -216,23 +274,21 @@ public class ConsultationSales extends javax.swing.JFrame {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String saleDate = dateFormat.format(rs.getDate("DEAL_DATE"));
                 sale.jtxtInvoiceNumber.setText(rs.getString("INVOICE_NUMBER") + "/" + saleDate);
-                sale.jtxtInvoiceNumberDialog.setText(rs.getString("INVOICE_NUMBER"));
                 sale.jcbPayment.getModel().setSelectedItem(jPayment.getModel().getSelectedItem());
                 sale.jtaPaymentText.setText(rs.getString("PAYMENT_TEXT"));
 
                 sale.jxtCredit.setText(rs.getString("CREDIT_DEAL_NUMBER"));
+
                 sale.jdtchCredit.setDate(rs.getDate("CREDIT_DEAL_DATE"));
 
                 sale.jlbVatValue.setText("ДДС (" + sale.VatPCT + "%): ");
                 if (((DropDown) sale.jcbStatuses.getSelectedItem()).getId() == 4) {
-                    sale.jchbReversal.setSelected(true);
                     sale.jpCreditNote.setVisible(true);
                     sale.jCreditNoteDate.setDate(rs.getDate("CR_NOTE_DATE"));
                     sale.jtxtCreditNoteNumber.setText(rs.getString("CR_NOTE_NUMBER"));
                     sale.jTextArea1.setText(rs.getString("CR_NOTE_TEXT"));
                     sale.creditID = rs.getInt("CREDIT_ID");
                 } else {
-                    sale.jchbReversal.setSelected(false);
                     Date date = new Date();
                     sale.jCreditNoteDate.setDate(date);
                     sale.jtxtCreditNoteNumber.setText("");
@@ -247,16 +303,17 @@ public class ConsultationSales extends javax.swing.JFrame {
                 payment.clear();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationCreditNotes.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void showDetails() {
+
         try {
             Connection con = getConnection();
+
             int row = jTable1.getSelectedRow();
             int correctModel = jTable1.convertRowIndexToModel(row);
-
             PreparedStatement ps = con.prepareStatement("select\n"
                     + "  AG.ID ARTICLE_GROUP_ID,\n"
                     + "  case\n"
@@ -270,7 +327,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                     + "    when D.LANG_ID = 2 then A.CODE || ' | '|| A.NAME_EN\n"
                     + "    when D.LANG_ID = 3 then A.CODE || ' | '|| A.NAME_BG\n"
                     + "  end ARTICLE,\n"
-                    + "  DD.QUANTITY, DD.PRICE, DD.LOT_ID, L.NUMBER LOT_NUMBER, DD.DVY_PRICE_WITH_VAT\n"
+                    + "  DD.QUANTITY * -1 as QUANTITY, DD.PRICE * -1 as PRICE, DD.LOT_ID, L.NUMBER LOT_NUMBER, DD.DVY_PRICE_WITH_VAT\n"
                     + "from\n"
                     + "  DEAL_DETAILS DD\n"
                     + "  join DEALS D on D.ID = DD.DEAL_ID\n"
@@ -278,7 +335,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                     + "  join ARTICLE_GROUPS AG on AG.ID = A.ARTICLE_GROUPS_ID\n"
                     + "  join LOTS L on L.ID = DD.LOT_ID\n"
                     + "where\n"
-                    + "  (D.OPERATION_ID = ? or D.OPERATION_ID = 6) and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0) + " order by A.ID desc");
+                    + "  D.OPERATION_ID = ? and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0) + " order by A.ID desc");
             ps.setInt(1, Type);
             ResultSet rs = ps.executeQuery();
             Vector<DropDown> article = new Vector<>();
@@ -298,11 +355,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 sale.jcbLots.getModel().setSelectedItem(jLot.getModel().getSelectedItem());
                 sale.jtxtPrice.setText(rs.getString("DVY_PRICE_WITH_VAT"));
 
-                int qty = rs.getInt("QUANTITY");
-                if ((Double) jTable1.getValueAt(correctModel, 8) < 0) {
-                    qty *= -1;
-                }
-                sale.jtxtQty.setValue(qty);
+                sale.jtxtQty.setValue(rs.getInt("QUANTITY"));
 
                 sale.jbtnAdd.doClick();
 
@@ -311,7 +364,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 lot.clear();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationCreditNotes.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -385,7 +438,7 @@ public class ConsultationSales extends javax.swing.JFrame {
         });
         jPopupMenu1.add(jmiDelete);
 
-        setTitle("Продажби");
+        setTitle("Сторнирани продажби");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -394,7 +447,7 @@ public class ConsultationSales extends javax.swing.JFrame {
         });
 
         jlbConsultation.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jlbConsultation.setText("Продажби");
+        jlbConsultation.setText("Сторнирани продажби");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultation/run24 (2).png"))); // NOI18N
         jButton1.setText("Изпълни");
@@ -497,7 +550,7 @@ public class ConsultationSales extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Сделка №", "Фактура №", "Дата на фактура", "Купувач", "Държава", "Канал", "Плащане", "ДДС категория", "Стойност (€)", "Начислено ДДС (€) "
+                "Сделка №", "КИ №", "Дата на КИ", "Купувач", "Държава", "Канал", "Плащане", "ДДС категория", "Стойност (€)", "Начислено ДДС (€) "
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -522,9 +575,9 @@ public class ConsultationSales extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(60);
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(90);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(150);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(130);
             jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(70);
             jTable1.getColumnModel().getColumn(7).setPreferredWidth(100);
             jTable1.getColumnModel().getColumn(9).setPreferredWidth(120);
         }
@@ -570,15 +623,15 @@ public class ConsultationSales extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jlbConsultation, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(344, 344, 344))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jtxtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(66, 66, 66)
                         .addComponent(jtxtTotalVat, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69))))
+                        .addGap(60, 60, 60))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jlbConsultation, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(386, 386, 386))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,13 +642,13 @@ public class ConsultationSales extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtxtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtxtTotalVat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGap(32, 32, 32)
                 .addComponent(jbtnClose)
                 .addGap(21, 21, 21))
         );
@@ -612,7 +665,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Няма данни по зададените критерии!");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationCreditNotes.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -622,36 +675,13 @@ public class ConsultationSales extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() == 2) {
-            sale.isCreditNote = 0;
-            sale.jlbSale.setText("Продажба");
-            sale.setTitle("Продажба");
-            sale.jlbInvoiceNumbers.setText("Номер и дата на фактура:");
-            sale.jxtCredit.setVisible(false);
-            sale.jdtchCredit.setVisible(false);
-            sale.jlbCredit.setVisible(false);
-            sale.jlbCreditDate.setVisible(false);
-            sale.jbntInvoice.setText("Фактура");
-
-            int row = jTable1.getSelectedRow();
-            int correctModel = jTable1.convertRowIndexToModel(row);
-            if ((Double) jTable1.getValueAt(correctModel, 8) < 0) {
-                sale.jlbSale.setText("Сторнирана продажба");
-                sale.setTitle("Сторнирана продажба");
-                sale.jlbInvoiceNumbers.setText("Номер и дата на КИ:");
-                sale.isCreditNote = 1;
-                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(sale.jtxtQty, "-#");
-                sale.jtxtQty.setEditor(editor);
-                sale.jxtCredit.setVisible(true);
-                sale.jdtchCredit.setVisible(true);
-                sale.jlbCredit.setVisible(true);
-                sale.jlbCreditDate.setVisible(true);
-                sale.jbntInvoice.setText("КИ");
-                sale.jxtCredit.setBackground(Color.CYAN);
-            }
-
             sale.checkQuantity = 0; // This is flag for check for availability quantity and sale quantity!!!!!   
             showMaster();
             showDetails();
+            sale.jtxtSaleNumber.setBackground(Color.white);
+            JSpinner.NumberEditor editor = new JSpinner.NumberEditor(sale.jtxtQty, "-#");
+            sale.jtxtQty.setEditor(editor);
+            sale.jtxtQty.setEditor(editor);
             sale.jcbArticleGroups.setSelectedIndex(-1);
             sale.jcbArticle.setSelectedIndex(-1);
             sale.jcbLots.setSelectedIndex(-1);
@@ -671,14 +701,14 @@ public class ConsultationSales extends javax.swing.JFrame {
                 sale.jbtnSave.setEnabled(false);
             }
             sale.isSave = 1;
-            sale.checkQuantity = 1; // This is flag for check for availability quantity and sale quantity!!!!!       
+            sale.checkQuantity = 1; // This is flag for check for availability quantity and sale quantity!!!!!
         }
     }//GEN-LAST:event_jTable1MouseClicked
     private void jbtnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExportActionPerformed
         String Date = new SimpleDateFormat("dd.MM.yyyy HH.mm.ss").format(Calendar.getInstance().getTime());
         File directory = new File(".");
         String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
-        String fileName = absolutePath + "Reports\\Sales " + Date;
+        String fileName = absolutePath + "Reports\\CreditNotes " + Date;
         if (ExcelExport(jTable1, fileName)) {
             JOptionPane.showMessageDialog(this, "Успешно експортиране!");
         } else {
@@ -693,17 +723,17 @@ public class ConsultationSales extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseReleased
 
     private void jmiDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiDeleteActionPerformed
-        int dialogButton = JOptionPane.showConfirmDialog(null, "Сигурни ли сте, че искате да изтриете продажбата!", "Справки", JOptionPane.YES_NO_OPTION);
+        int dialogButton = JOptionPane.showConfirmDialog(null, "Сигурни ли сте, че искате да изтриете Креднитнто известие!", "Справки", JOptionPane.YES_NO_OPTION);
         if (dialogButton == JOptionPane.YES_OPTION) {
             try {
                 Connection con = getConnection();
                 PreparedStatement ps = con.prepareStatement("delete from DEALS D\n"
-                        + "where (D.DEAL_NUMBER = ? and D.OPERATION_ID = 1)");
+                        + "where (D.DEAL_NUMBER = ? and D.OPERATION_ID = 6)");
                 ps.setString(1, jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString());
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Успешно изтрихте продажбата!");
+                JOptionPane.showMessageDialog(null, "Успешно изтрихте кредитното известие!");
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Не може да изтриете тази продажба!");
+                JOptionPane.showMessageDialog(null, "Не може да изтриете това кредитно известие!");
             }
             if (dialogButton == JOptionPane.NO_OPTION) {
                 remove(dialogButton);
@@ -732,20 +762,27 @@ public class ConsultationSales extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationCreditNotes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationCreditNotes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationCreditNotes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationCreditNotes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultationSales().setVisible(true);
+                new ConsultationCreditNotes().setVisible(true);
             }
         });
     }

@@ -62,6 +62,10 @@ public class SALE extends javax.swing.JFrame {
     public static int savedClient = 0;
     public int checkQuantity = 1; // This is flag for check for availability quantity and sale quantity!!!!!
 
+    // 04.11.2019 Added Offer and Credit Note
+    public int isCreditNote = 0;
+    public int isOffer = 0;
+
     /**
      * Creates new form SALE
      */
@@ -104,6 +108,13 @@ public class SALE extends javax.swing.JFrame {
         if (jtxtSaleNumber.getText().isEmpty()) {
             jtxtSaleNumber.setBackground(Color.pink);
         }
+
+        // 04.11.2019
+        jxtCredit.setVisible(false);
+        jdtchCredit.setVisible(false);
+        jlbCredit.setVisible(false);
+        jlbCreditDate.setVisible(false);
+        jchbReversal.setVisible(false);
     }
 
     private boolean checkInputs() {
@@ -127,6 +138,11 @@ public class SALE extends javax.swing.JFrame {
     private void setValuesLots() {
         String sql = "select LC.ID, LC.NUMBER from LOTS_COMBO("
                 + ((DropDown) jcbArticle.getSelectedItem()).getId() + ")LC";
+        if (isCreditNote == 1) {
+            sql = "select distinct DD.LOT_ID, L.NUMBER\n"
+                    + "from DEAL_DETAILS DD join LOTS L on L.ID = DD.LOT_ID\n"
+                    + "where DD.ARTICLE_ID = " + ((DropDown) jcbArticle.getSelectedItem()).getId();
+        }
         setValuesComboBox(sql, jcbLots, false, -1, false);
     }
 
@@ -145,6 +161,11 @@ public class SALE extends javax.swing.JFrame {
                 String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_DE) NAME_DE from ARTICLES A "
                         + "where A.ARTICLE_GROUPS_ID = "
                         + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                if (isCreditNote == 1) {
+                    sql = "select A.ID, (A.CODE || ' | ' || A.NAME_DE) NAME_DE from ARTICLES A "
+                            + "where A.ARTICLE_GROUPS_ID = "
+                            + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                }
                 setValuesComboBox(sql, jcbArticle, false, -1, false);
                 break;
             }
@@ -152,6 +173,11 @@ public class SALE extends javax.swing.JFrame {
                 String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_EN) NAME_DE from ARTICLES A "
                         + "where A.ARTICLE_GROUPS_ID = "
                         + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                if (isCreditNote == 1) {
+                    sql = "select A.ID, (A.CODE || ' | ' || A.NAME_EN) NAME_DE from ARTICLES A "
+                            + "where A.ARTICLE_GROUPS_ID = "
+                            + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                }
                 setValuesComboBox(sql, jcbArticle, false, -1, false);
                 break;
             }
@@ -159,6 +185,11 @@ public class SALE extends javax.swing.JFrame {
                 String sql = "select A.ID, (A.CODE || ' | ' || A.NAME_BG) NAME_DE from ARTICLES A "
                         + "where A.ARTICLE_GROUPS_ID = "
                         + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                if (isCreditNote == 1) {
+                    sql = "select A.ID, (A.CODE || ' | ' || A.NAME_BG) NAME_DE from ARTICLES A "
+                            + "where A.ARTICLE_GROUPS_ID = "
+                            + (((DropDown) jcbArticleGroups.getSelectedItem()).getId());
+                }
                 setValuesComboBox(sql, jcbArticle, false, -1, false);
                 break;
             }
@@ -188,11 +219,15 @@ public class SALE extends javax.swing.JFrame {
 
     private void GenerateSaleNumber() {
         String saleNumber = null;
+        String sql = "SELECT NEXT VALUE FOR DEAL_NUMBER_GEN FROM RDB$DATABASE;";
+        if (isOffer == 1) {
+            sql = "SELECT NEXT VALUE FOR OFFER_NUMBER_GEN FROM RDB$DATABASE;";
+        }
         if (jtxtSaleNumber.getText().isEmpty()) {
             try {
                 jtxtSaleNumber.setBackground(Color.white);
                 Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT NEXT VALUE FOR DEAL_NUMBER_GEN FROM RDB$DATABASE");
+                PreparedStatement ps = con.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     saleNumber = rs.getString(1);
@@ -268,15 +303,22 @@ public class SALE extends javax.swing.JFrame {
             Connection con = getConnection();
 
             PreparedStatement ps = con.prepareStatement("update or insert into DEALS (ID, DEAL_NUMBER, DEAL_DATE, OPERATION_ID, DEAL_TYPE_ID, CHANNEL_ID, STATUS_ID, CLIENT_ID, LANG_ID,\n"
-                    + " DEAL_VALUE, TRANSPORT_COSTS, CHANNEL_COSTS, BANK_COSTS, OTHER_COSTS, CURRENCY_ID, USER_ID, VALUE_VAT)\n"
+                    + " DEAL_VALUE, TRANSPORT_COSTS, CHANNEL_COSTS, BANK_COSTS, OTHER_COSTS, CURRENCY_ID, USER_ID, VALUE_VAT, CREDIT_DEAL_NUMBER, CREDIT_DEAL_DATE)\n"
                     + "values (?, ?, ?, ?, ?, ?, ?, ?, ?,\n"
-                    + " ?, ?, ?, ?, ?, ?, ?, ?) matching (ID, DEAL_NUMBER)");
+                    + " ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) matching (ID, DEAL_NUMBER)");
 
             ps.setInt(1, saleID);
             ps.setInt(2, Integer.parseInt(jtxtSaleNumber.getText()));
             java.sql.Date sqldate = new java.sql.Date(jDateSale.getDate().getTime());
             ps.setDate(3, sqldate);
-            ps.setInt(4, 1);  // TODO: This is operation type
+            int operation = 1;
+            if (isOffer == 1) {
+                operation = 5;
+            }
+            if (isCreditNote == 1) {
+                operation = 6;
+            }
+            ps.setInt(4, operation);  // TODO: This is operation type
             ps.setInt(5, ((DropDown) jcbDealType.getSelectedItem()).getId());
             ps.setInt(6, ((DropDown) jcbChannel.getSelectedItem()).getId());
             ps.setInt(7, ((DropDown) jcbStatuses.getSelectedItem()).getId());
@@ -290,6 +332,14 @@ public class SALE extends javax.swing.JFrame {
             ps.setInt(15, 1); // TODO: This is for currency_ID
             ps.setInt(16, Login.userID);
             ps.setDouble(17, Double.parseDouble(jtxtVatValue.getText().replace(",", ".").replace("\u00A0", "")));
+            String Credit = null;
+            java.sql.Date sqlCreditDate = null;
+            if (isCreditNote == 1) {
+                sqlCreditDate = new java.sql.Date(jdtchCredit.getDate().getTime());
+                Credit = jxtCredit.getText();
+            }
+            ps.setString(18, Credit);
+            ps.setDate(19, sqlCreditDate);
             ps.executeUpdate();
             insertMaster = 1;
         } catch (HeadlessException | SQLException ex) {
@@ -334,10 +384,15 @@ public class SALE extends javax.swing.JFrame {
 
             try {
                 Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT NEXT VALUE FOR INVOICE_NUMBER_GEN FROM RDB$DATABASE");
+                String sql = "SELECT NEXT VALUE FOR INVOICE_NUMBER_GEN FROM RDB$DATABASE;";
+                if (isCreditNote == 1)
+                    sql = "SELECT NEXT VALUE FOR CREDIT_NUMBER_GEN FROM RDB$DATABASE;";
+                PreparedStatement ps = con.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     invoiceNumber = rs.getString(1);
+                    if (isCreditNote == 1)
+                        invoiceNumber = "CN " + invoiceNumber;
                     jtxtInvoiceNumberDialog.setText(invoiceNumber);
                 }
             } catch (SQLException e) {
@@ -382,7 +437,11 @@ public class SALE extends javax.swing.JFrame {
             ps.setInt(4, ((DropDown) jcbPaymentType.getSelectedItem()).getId());
             ps.setString(5, jtaPaymentText.getText());
             ps.setString(6, creditIdString);
-            ps.setInt(7, 1); // This is for Operation_type (sale == 1);
+            int operation = 1;
+            if (isCreditNote == 1) {
+                operation = 6;
+            }
+            ps.setInt(7, operation); // This is for Operation_type (sale == 1);
             ps.executeUpdate();
 
             this.DialogInvoice.setVisible(false);
@@ -454,6 +513,10 @@ public class SALE extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jPopUpDelete = new javax.swing.JMenuItem();
+        jbtnRefreshSale = new javax.swing.JButton();
+        jcbCountry = new javax.swing.JComboBox<>();
         DialogInvoice = new javax.swing.JDialog();
         jlbInvoice = new javax.swing.JLabel();
         jlbInvoiceNumber = new javax.swing.JLabel();
@@ -476,10 +539,6 @@ public class SALE extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jbtnSaveDialog = new javax.swing.JButton();
         jbtnCloseDialog = new javax.swing.JButton();
-        jPopupMenu1 = new javax.swing.JPopupMenu();
-        jPopUpDelete = new javax.swing.JMenuItem();
-        jbtnRefreshSale = new javax.swing.JButton();
-        jcbCountry = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jtxtSaleNumber = new javax.swing.JTextField();
         jlbSale = new javax.swing.JLabel();
@@ -540,15 +599,39 @@ public class SALE extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jbntInvoice = new javax.swing.JButton();
         jlbCreditNote = new javax.swing.JLabel();
+        jxtCredit = new javax.swing.JTextField();
+        jlbCredit = new javax.swing.JLabel();
+        jlbCreditDate = new javax.swing.JLabel();
+        jdtchCredit = new com.toedter.calendar.JDateChooser();
         jSeparator1 = new javax.swing.JSeparator();
 
+        jPopUpDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sale/delete16.png"))); // NOI18N
+        jPopUpDelete.setText("Изтрий!");
+        jPopUpDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPopUpDeleteActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jPopUpDelete);
+
+        jbtnRefreshSale.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultation/refresh.png"))); // NOI18N
+        jbtnRefreshSale.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jbtnRefreshSale.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnRefreshSaleActionPerformed(evt);
+            }
+        });
+
         DialogInvoice.setTitle("Фактура");
-        DialogInvoice.setMinimumSize(new java.awt.Dimension(488, 650));
+        DialogInvoice.setAutoRequestFocus(false);
+        DialogInvoice.setMinimumSize(new java.awt.Dimension(450, 450));
         DialogInvoice.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
 
         jlbInvoice.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jlbInvoice.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbInvoice.setText("Фактура");
         jlbInvoice.setToolTipText("");
+        jlbInvoice.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jlbInvoiceNumber.setText("Номер:");
 
@@ -586,6 +669,8 @@ public class SALE extends javax.swing.JFrame {
                 jchbReversalActionPerformed(evt);
             }
         });
+
+        jpCreditNote.setEnabled(false);
 
         jlbCreditNoteText.setText("Допълнително описание:");
 
@@ -638,7 +723,7 @@ public class SALE extends javax.swing.JFrame {
                 .addComponent(jlbCreditNoteText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         jbtnSaveDialog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sale/Save32.png"))); // NOI18N
@@ -661,37 +746,36 @@ public class SALE extends javax.swing.JFrame {
         DialogInvoice.getContentPane().setLayout(DialogInvoiceLayout);
         DialogInvoiceLayout.setHorizontalGroup(
             DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, DialogInvoiceLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jlbInvoice)
-                .addGap(175, 175, 175))
             .addGroup(DialogInvoiceLayout.createSequentialGroup()
                 .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(DialogInvoiceLayout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jcbPaymentType, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(DialogInvoiceLayout.createSequentialGroup()
-                                .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jtxtInvoiceNumberDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jlbInvoiceNumber))
+                                .addComponent(jtxtInvoiceNumberDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(38, 38, 38)
                                 .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jlbInvoiceDate)
                                     .addComponent(jDateInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jlbPaymentType)
                             .addComponent(jlbPaymentText)
-                            .addComponent(jchbReversal)))
-                    .addGroup(DialogInvoiceLayout.createSequentialGroup()
-                        .addGap(120, 120, 120)
-                        .addComponent(jbtnSaveDialog)
-                        .addGap(26, 26, 26)
-                        .addComponent(jbtnCloseDialog))
+                            .addComponent(jlbInvoiceNumber)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlbInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(DialogInvoiceLayout.createSequentialGroup()
                         .addGap(60, 60, 60)
-                        .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(93, Short.MAX_VALUE))
+                        .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(DialogInvoiceLayout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(jchbReversal))
+                            .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(DialogInvoiceLayout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(jbtnSaveDialog)
+                        .addGap(26, 26, 26)
+                        .addComponent(jbtnCloseDialog)))
+                .addContainerGap(77, Short.MAX_VALUE))
         );
         DialogInvoiceLayout.setVerticalGroup(
             DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -718,31 +802,13 @@ public class SALE extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jchbReversal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpCreditNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(22, 22, 22)
                 .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnSaveDialog)
-                    .addComponent(jbtnCloseDialog))
-                .addGap(41, 41, 41))
+                    .addComponent(jbtnCloseDialog)
+                    .addComponent(jbtnSaveDialog)))
         );
-
-        jPopUpDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sale/delete16.png"))); // NOI18N
-        jPopUpDelete.setText("Изтрий!");
-        jPopUpDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPopUpDeleteActionPerformed(evt);
-            }
-        });
-        jPopupMenu1.add(jPopUpDelete);
-
-        jbtnRefreshSale.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultation/refresh.png"))); // NOI18N
-        jbtnRefreshSale.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jbtnRefreshSale.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnRefreshSaleActionPerformed(evt);
-            }
-        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Продажба");
@@ -784,11 +850,6 @@ public class SALE extends javax.swing.JFrame {
         jlbDealType.setText("Тип на сделката:");
 
         jcbChannel.setToolTipText("През кой канал продаваме!");
-        jcbChannel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jcbChannelActionPerformed(evt);
-            }
-        });
 
         jlbChannel.setText("Канал на сделката:");
 
@@ -1163,6 +1224,10 @@ public class SALE extends javax.swing.JFrame {
         jlbCreditNote.setForeground(new java.awt.Color(255, 0, 0));
         jlbCreditNote.setText("Сторнирана продажба!");
 
+        jlbCredit.setText("Към фактура No:");
+
+        jlbCreditDate.setText("Дата на фактурата:");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1187,12 +1252,21 @@ public class SALE extends javax.swing.JFrame {
                         .addGap(32, 32, 32)
                         .addComponent(jtxtTransportCosts, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jlbCreditNote)
-                .addGap(60, 60, 60)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jlbInvoiceNumbers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jtxtInvoiceNumber))
-                .addGap(30, 30, 30)
+                    .addComponent(jlbCredit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jlbCreditDate)
+                    .addComponent(jxtCredit)
+                    .addComponent(jdtchCredit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(29, 29, 29)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jlbInvoiceNumbers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jtxtInvoiceNumber))
+                        .addGap(30, 30, 30))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jlbCreditNote)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jtbnPrint, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jbntInvoice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1226,8 +1300,13 @@ public class SALE extends javax.swing.JFrame {
                                             .addComponent(jlbInvoiceNumbers)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(jtxtInvoiceNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jtbnPrint))
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jtbnPrint))
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addGap(29, 29, 29)
+                                            .addComponent(jlbCreditNote))))
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jlbPayment)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1240,7 +1319,16 @@ public class SALE extends javax.swing.JFrame {
                                 .addGap(12, 12, 12)
                                 .addComponent(jbtnSave)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jbtnClose)))
+                                .addComponent(jbtnClose))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jlbCredit)
+                                .addGap(8, 8, 8)
+                                .addComponent(jxtCredit, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jlbCreditDate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jdtchCredit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(16, 16, 16))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -1248,19 +1336,14 @@ public class SALE extends javax.swing.JFrame {
                             .addComponent(jtxtTransportCosts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlbTransportCosts))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jtxtBankCosts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jlbBankCosts))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jlbChannelCosts)
-                                    .addComponent(jtxtChannelCosts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(jlbCreditNote)
-                                .addGap(18, 18, 18)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jtxtBankCosts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jlbBankCosts))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jlbChannelCosts)
+                            .addComponent(jtxtChannelCosts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtxtOtherCosts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jlbOtherCosts)))))
@@ -1430,6 +1513,9 @@ public class SALE extends javax.swing.JFrame {
             availQty = Integer.parseInt(jtxtAvailability.getText());
         }
         int qty = (Integer) jtxtQty.getValue();
+        if (isCreditNote == 1) {
+            qty *= -1;
+        }
         if (jcbArticle.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(null, "Моля изберете артикул!", "Продажба", JOptionPane.NO_OPTION);
         } else if (jcbLots.getSelectedIndex() == -1 && isActive == 1) {
@@ -1453,7 +1539,7 @@ public class SALE extends javax.swing.JFrame {
             double Total = 0;
             String TotalSTR = null;
             if (VatPCT == 0) {
-                Total = Double.valueOf(jtxtPrice.getText()) * Double.valueOf(jtxtQty.getValue().toString());
+                Total = Double.valueOf(jtxtPrice.getText()) * Double.valueOf(qty);
                 TotalSTR = String.format("%.2f", Total);
                 Total = Double.valueOf(TotalSTR.replace(",", "."));
                 priceWoVat = Double.valueOf(jtxtPrice.getText()); // priceWithVat
@@ -1469,7 +1555,7 @@ public class SALE extends javax.swing.JFrame {
                 valueWoVat = String.format("%.2f", priceWoVat);
                 priceWoVat = Double.valueOf(valueWoVat.replace(",", "."));
 
-                Total = priceWoVat * Double.valueOf(jtxtQty.getValue().toString());
+                Total = priceWoVat * Double.valueOf(qty);
                 TotalSTR = String.format("%.2f", Total);
                 Total = Double.valueOf(TotalSTR.replace(",", "."));
 
@@ -1492,15 +1578,19 @@ public class SALE extends javax.swing.JFrame {
                         checkForExist();
                     }
                     if (Exist == 0) {
+                        String Qty = String.valueOf(jtxtQty.getValue());
+                        if (isCreditNote == 1) {
+                            Qty = "-" + Qty;
+                        }
                         switch (((DropDown) jcbLang.getSelectedItem()).getId()) {
                             case 1:
-                                model.addRow(new Object[]{ID, code, article, jcbLots.getSelectedItem(), Double.parseDouble(jtxtPrice.getText()), priceWoVat, jtxtQty.getValue().toString(), MeasureDE, Total});
+                                model.addRow(new Object[]{ID, code, article, jcbLots.getSelectedItem(), Double.parseDouble(jtxtPrice.getText()), priceWoVat, Qty, MeasureDE, Total});
                                 break;
                             case 2:
-                                model.addRow(new Object[]{ID, code, article, jcbLots.getSelectedItem(), Double.parseDouble(jtxtPrice.getText()), priceWoVat, jtxtQty.getValue().toString(), MeasureEN, Total});
+                                model.addRow(new Object[]{ID, code, article, jcbLots.getSelectedItem(), Double.parseDouble(jtxtPrice.getText()), priceWoVat, Qty, MeasureEN, Total});
                                 break;
                             case 3:
-                                model.addRow(new Object[]{ID, code, article, jcbLots.getSelectedItem(), Double.parseDouble(jtxtPrice.getText()), priceWoVat, jtxtQty.getValue().toString(), MeasureBG, Total});
+                                model.addRow(new Object[]{ID, code, article, jcbLots.getSelectedItem(), Double.parseDouble(jtxtPrice.getText()), priceWoVat, Qty, MeasureBG, Total});
                                 break;
                             default:
                                 break;
@@ -1612,8 +1702,22 @@ public class SALE extends javax.swing.JFrame {
 
     private void jbntInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbntInvoiceActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        if (isCreditNote == 1) {
+            jlbInvoice.setText("Кредитно известие");
+            DialogInvoice.setTitle("Кредитно известие");
+        }
+        else {
+           jlbInvoice.setText("Фактура");
+           DialogInvoice.setTitle("Фактура"); 
+        }
         if (isSave == 0) {
-            int dialogButton = JOptionPane.showConfirmDialog(null, "Искате ли да издадете фактура?", "Продажба", JOptionPane.YES_NO_OPTION);
+            String msg = "Искате ли да издадете фактура?";
+            String msgTypе = "Продажба";
+            if (isCreditNote == 1) {
+                msg = "Искате ли да издадете КИ?";
+                msgTypе = "Сторнирана продажба";
+            }
+            int dialogButton = JOptionPane.showConfirmDialog(null, msg, msgTypе, JOptionPane.YES_NO_OPTION);
             if (dialogButton == JOptionPane.YES_OPTION) {
                 if (checkInputs()) {
                     JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
@@ -1648,9 +1752,9 @@ public class SALE extends javax.swing.JFrame {
                 jcbPaymentType.setSelectedIndex(-1);
             } else {
                 String number = jtxtInvoiceNumber.getText();
-
                 String invoiceNumber = number.substring(number.indexOf("-") + 1, number.indexOf("/"));
                 jtxtInvoiceNumberDialog.setText(invoiceNumber);
+                System.out.println(invoiceNumber);
                 jcbPaymentType.getModel().setSelectedItem(jcbPayment.getModel().getSelectedItem());
             }
             DialogInvoice.pack();
@@ -1687,6 +1791,8 @@ public class SALE extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
         } else if (model.getRowCount() == 0) {
             JOptionPane.showMessageDialog(this, "Моля Добавете поне един артикул в таблицата!");
+        } else if (isCreditNote == 1 && (jxtCredit.getText().isEmpty() || jdtchCredit.getDate() == null)) {
+            JOptionPane.showMessageDialog(null, "Моля въведете към Фактура No и дата на фактура!");
         } else {
             InsertMaster();
             InsertDetail();
@@ -1721,10 +1827,6 @@ public class SALE extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jcbDealTypeActionPerformed
 
-    private void jcbChannelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbChannelActionPerformed
-
-    }//GEN-LAST:event_jcbChannelActionPerformed
-
     private void jtbnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtbnPrintActionPerformed
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         if (isSave == 0) {
@@ -1757,12 +1859,20 @@ public class SALE extends javax.swing.JFrame {
                             Connection con = getConnection();
                             PreparedStatement ps = con.prepareStatement("select\n"
                                     + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 3 order by R.ID) MAIN_REPORT,\n"
-                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 4 order by R.ID) SUBREPORT\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 4 order by R.ID) SUBREPORT,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 13 order by R.ID) OFFER,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 16 order by R.ID) CREDIT\n"
                                     + "from\n"
                                     + "  RDB$DATABASE");
                             ResultSet rs = ps.executeQuery();
                             while (rs.next()) {
                                 InputStream fileMain = rs.getBinaryStream("MAIN_REPORT");
+                                if (isOffer == 1) {
+                                    fileMain = rs.getBinaryStream("OFFER");
+                                }
+                                if (isCreditNote == 1) {
+                                    fileMain = rs.getBinaryStream("CREDIT");
+                                }
                                 InputStream fileSub = rs.getBinaryStream("SUBREPORT");
                                 JasperReport jr = (JasperReport) JRLoader.loadObject(fileMain);
                                 JasperReport sub = (JasperReport) JRLoader.loadObject(fileSub);
@@ -1782,12 +1892,20 @@ public class SALE extends javax.swing.JFrame {
                             Connection con = getConnection();
                             PreparedStatement ps = con.prepareStatement("select\n"
                                     + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 1 order by R.ID) MAIN_REPORT,\n"
-                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 2 order by R.ID) SUBREPORT\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 2 order by R.ID) SUBREPORT,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 14 order by R.ID) OFFER,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 17 order by R.ID) CREDIT\n"
                                     + "from\n"
                                     + "  RDB$DATABASE");
                             ResultSet rs = ps.executeQuery();
                             while (rs.next()) {
                                 InputStream fileMain = rs.getBinaryStream("MAIN_REPORT");
+                                if (isOffer == 1) {
+                                    fileMain = rs.getBinaryStream("OFFER");
+                                }
+                                if (isCreditNote == 1) {
+                                    fileMain = rs.getBinaryStream("CREDIT");
+                                }
                                 InputStream fileSub = rs.getBinaryStream("SUBREPORT");
                                 JasperReport jr = (JasperReport) JRLoader.loadObject(fileMain);
                                 JasperReport sub = (JasperReport) JRLoader.loadObject(fileSub);
@@ -1807,12 +1925,20 @@ public class SALE extends javax.swing.JFrame {
                             Connection con = getConnection();
                             PreparedStatement ps = con.prepareStatement("select\n"
                                     + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 5 order by R.ID) MAIN_REPORT,\n"
-                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 6 order by R.ID) SUBREPORT\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 6 order by R.ID) SUBREPORT,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 15 order by R.ID) OFFER,\n"
+                                    + "  (select R.\"FILE\" MAIN_EN from REPORTS R where R.ID = 18 order by R.ID) CREDIT\n"
                                     + "from\n"
                                     + "  RDB$DATABASE");
                             ResultSet rs = ps.executeQuery();
                             while (rs.next()) {
                                 InputStream fileMain = rs.getBinaryStream("MAIN_REPORT");
+                                if (isOffer == 1) {
+                                    fileMain = rs.getBinaryStream("OFFER");
+                                }
+                                if (isCreditNote == 1) {
+                                    fileMain = rs.getBinaryStream("CREDIT");
+                                }
                                 InputStream fileSub = rs.getBinaryStream("SUBREPORT");
                                 JasperReport jr = (JasperReport) JRLoader.loadObject(fileMain);
                                 JasperReport sub = (JasperReport) JRLoader.loadObject(fileSub);
@@ -1857,80 +1983,6 @@ public class SALE extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jcbLotsActionPerformed
-
-    private void jcbPaymentTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPaymentTypeActionPerformed
-        if (jtxtInvoiceNumberDialog.getText().isEmpty()) {
-            GenerateInvoiceNumber();
-            Date date = jDateInvoice.getDate();
-            String year = String.format("%1$tY", date);
-            String dateInvoice = new SimpleDateFormat("dd.MM.yyyy").format(date);
-            SALE.jtxtInvoiceNumber.setText(year + "-" + jtxtInvoiceNumberDialog.getText() + "/" + dateInvoice);
-
-        }
-
-        String number = jtxtInvoiceNumber.getText();
-        String invoiceNumber = number.substring(0, number.indexOf("/"));
-        String myInvoiceNumber = null;
-        if (!jtxtInvoiceNumberDialog.getText().isEmpty() && checkInvoiceNumber == 1) {
-            try {
-                Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("select I.INVOICE_NUMBER from INVOICES I where I.INVOICE_NUMBER = ? and I.OPERATION_ID = 1");
-                ps.setString(1, invoiceNumber);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    myInvoiceNumber = rs.getString(1);
-                    if (invoiceNumber.equals(myInvoiceNumber)) {
-                        JOptionPane.showMessageDialog(this, "Фактура с такъв номер вече съществува!");
-                        jtxtInvoiceNumberDialog.setText("");
-                    }
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, ex);
-            }
-        }
-
-    }//GEN-LAST:event_jcbPaymentTypeActionPerformed
-
-    private void jchbReversalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchbReversalActionPerformed
-        if (jchbReversal.isSelected()) {
-            jpCreditNote.setVisible(true);
-            Date creditDate = new Date();
-            jCreditNoteDate.setDate(creditDate);
-        } else {
-            jpCreditNote.setVisible(false);
-        }
-    }//GEN-LAST:event_jchbReversalActionPerformed
-
-    private void jbtnCloseDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCloseDialogActionPerformed
-        DialogInvoice.setVisible(false);
-    }//GEN-LAST:event_jbtnCloseDialogActionPerformed
-
-    private void jtxtInvoiceNumberDialogFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtInvoiceNumberDialogFocusLost
-        Date date = jDateInvoice.getDate();
-        String year = String.format("%1$tY", date);
-        String dateInvoice = new SimpleDateFormat("dd.MM.yyyy").format(date);
-        SALE.jtxtInvoiceNumber.setText(year + "-" + jtxtInvoiceNumberDialog.getText() + "/" + dateInvoice);
-        String number = jtxtInvoiceNumber.getText();
-        String invoiceNumber = number.substring(0, number.indexOf("/"));
-        String myInvoiceNumber = null;
-        if (!jtxtInvoiceNumberDialog.getText().isEmpty() && checkInvoiceNumber == 1) {
-            try {
-                Connection con = getConnection();
-                PreparedStatement ps = con.prepareStatement("select I.INVOICE_NUMBER from INVOICES I where I.INVOICE_NUMBER = ? and I.OPERATION_ID = 1");
-                ps.setString(1, invoiceNumber);
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    myInvoiceNumber = rs.getString(1);
-                    if (invoiceNumber.equals(myInvoiceNumber)) {
-                        JOptionPane.showMessageDialog(this, "Фактура с такъв номер вече съществува!");
-                        jtxtInvoiceNumberDialog.setText("");
-                    }
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, ex);
-            }
-        }
-    }//GEN-LAST:event_jtxtInvoiceNumberDialogFocusLost
 
     private void jtxtTransportCostsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtTransportCostsFocusLost
         if (!jtxtTransportCosts.getText().isEmpty()) {
@@ -2012,44 +2064,6 @@ public class SALE extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtxtSaleNumberFocusLost
 
-    private void jbtnSaveDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveDialogActionPerformed
-        if (jtxtInvoiceNumberDialog.getText().isEmpty() && jcbPaymentType.getSelectedIndex() == -1) {
-            JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
-        } else if (!jchbReversal.isSelected()) {
-            InsertUpdateInvoice();
-            checkInvoiceNumber = 0;
-            jtxtInvoiceNumberDialog.setEditable(false);
-            Date date = jDateInvoice.getDate();
-            String year = String.format("%1$tY", date);
-            String dateInvoice = new SimpleDateFormat("dd.MM.yyyy").format(date);
-            if (SALE.jtxtInvoiceNumber.getText().isEmpty()) {
-                SALE.jtxtInvoiceNumber.setText(year + "-" + jtxtInvoiceNumberDialog.getText() + "/" + dateInvoice);
-            }
-            SALE.jcbPayment.getModel().setSelectedItem(SALE.jcbPaymentType.getModel().getSelectedItem());
-        } else if (jchbReversal.isSelected()) {
-            if (jtxtCreditNoteNumber.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Моля попълнете номер на кредитно известие!");
-            } else {
-                try {
-                    Connection con = getConnection();
-                    PreparedStatement ps = con.prepareStatement("update or insert into CREDIT_NOTES (ID, CR_NOTE_NUMBER, CR_NOTE_DATE, CR_NOTE_TEXT)\n"
-                            + "values (?, ?, ?, ?) matching (ID, CR_NOTE_NUMBER)");
-                    ps.setInt(1, creditID);
-                    ps.setString(2, jtxtCreditNoteNumber.getText());
-                    java.sql.Date sqldate = new java.sql.Date(jCreditNoteDate.getDate().getTime());
-                    ps.setDate(3, sqldate);
-                    ps.setString(4, jTextArea1.getText());
-                    ps.executeUpdate();
-                    InsertUpdateInvoice();
-                    this.DialogInvoice.setVisible(false);
-
-                } catch (HeadlessException | SQLException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage());
-                }
-            }
-        }
-    }//GEN-LAST:event_jbtnSaveDialogActionPerformed
-
     private void onExit(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onExit
         jbtnClose.doClick();
     }//GEN-LAST:event_onExit
@@ -2071,16 +2085,6 @@ public class SALE extends javax.swing.JFrame {
             getSum();
         }
     }//GEN-LAST:event_jTable1PropertyChange
-
-    private void jtxtCreditNoteNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtCreditNoteNumberFocusGained
-        if (jchbReversal.isSelected() && jtxtCreditNoteNumber.getText().isEmpty()) {
-            if (isSave == 0) {
-                JOptionPane.showMessageDialog(null, "Не може да сторнирате продажба, която не е записана!");
-            } else {
-                GenerateCreditNote();
-            }
-        }
-    }//GEN-LAST:event_jtxtCreditNoteNumberFocusGained
 
     private void jcbStatusesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbStatusesActionPerformed
         if (((DropDown) jcbStatuses.getSelectedItem()).getId() == 5) {
@@ -2185,6 +2189,38 @@ public class SALE extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jbtnEditClientActionPerformed
 
+    private void jtxtSaleNumberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtSaleNumberMouseClicked
+        generateSaleID();
+        GenerateSaleNumber();
+    }//GEN-LAST:event_jtxtSaleNumberMouseClicked
+
+    private void jtxtInvoiceNumberDialogFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtInvoiceNumberDialogFocusLost
+        Date date = jDateInvoice.getDate();
+        String year = String.format("%1$tY", date);
+        String dateInvoice = new SimpleDateFormat("dd.MM.yyyy").format(date);
+        SALE.jtxtInvoiceNumber.setText(year + "-" + jtxtInvoiceNumberDialog.getText() + "/" + dateInvoice);
+        String number = jtxtInvoiceNumber.getText();
+        String invoiceNumber = number.substring(0, number.indexOf("/"));
+        String myInvoiceNumber = null;
+        if (!jtxtInvoiceNumberDialog.getText().isEmpty() && checkInvoiceNumber == 1) {
+            try {
+                Connection con = getConnection();
+                PreparedStatement ps = con.prepareStatement("select I.INVOICE_NUMBER from INVOICES I where I.INVOICE_NUMBER = ? and I.OPERATION_ID = 1");
+                ps.setString(1, invoiceNumber);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    myInvoiceNumber = rs.getString(1);
+                    if (invoiceNumber.equals(myInvoiceNumber)) {
+                        JOptionPane.showMessageDialog(this, "Фактура с такъв номер вече съществува!");
+                        jtxtInvoiceNumberDialog.setText("");
+                    }
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex);
+            }
+        }
+    }//GEN-LAST:event_jtxtInvoiceNumberDialogFocusLost
+
     private void jtxtInvoiceNumberDialogMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtInvoiceNumberDialogMouseClicked
         if (evt.getClickCount() == 2) {
             jtxtInvoiceNumberDialog.setEditable(true);
@@ -2192,10 +2228,98 @@ public class SALE extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jtxtInvoiceNumberDialogMouseClicked
 
-    private void jtxtSaleNumberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtxtSaleNumberMouseClicked
-        generateSaleID();
-        GenerateSaleNumber();
-    }//GEN-LAST:event_jtxtSaleNumberMouseClicked
+    private void jcbPaymentTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbPaymentTypeActionPerformed
+        if (jtxtInvoiceNumberDialog.getText().isEmpty()) {
+            GenerateInvoiceNumber();
+            Date date = jDateInvoice.getDate();
+            String year = String.format("%1$tY", date);
+            String dateInvoice = new SimpleDateFormat("dd.MM.yyyy").format(date);
+            SALE.jtxtInvoiceNumber.setText(year + "-" + jtxtInvoiceNumberDialog.getText() + "/" + dateInvoice);
+            String number = jtxtInvoiceNumber.getText();
+            String invoiceNumber = number.substring(0, number.indexOf("/"));
+            String myInvoiceNumber = null;
+            if (!jtxtInvoiceNumberDialog.getText().isEmpty() && checkInvoiceNumber == 1) {
+                try {
+                    Connection con = getConnection();
+                    PreparedStatement ps = con.prepareStatement("select I.INVOICE_NUMBER from INVOICES I where I.INVOICE_NUMBER = ? and I.OPERATION_ID = 1");
+                    ps.setString(1, invoiceNumber);
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        myInvoiceNumber = rs.getString(1);
+                        if (invoiceNumber.equals(myInvoiceNumber)) {
+                            JOptionPane.showMessageDialog(this, "Фактура с такъв номер вече съществува!");
+                            jtxtInvoiceNumberDialog.setText("");
+                        }
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_jcbPaymentTypeActionPerformed
+
+    private void jchbReversalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jchbReversalActionPerformed
+        /*        // jpCreditNote.setVisible(false);
+        if (jchbReversal.isSelected()) {
+            jpCreditNote.setVisible(true);
+            Date creditDate = new Date();
+            jCreditNoteDate.setDate(creditDate);
+        } else {
+            jpCreditNote.setVisible(false);
+        }*/
+    }//GEN-LAST:event_jchbReversalActionPerformed
+
+    private void jtxtCreditNoteNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtCreditNoteNumberFocusGained
+        if (jchbReversal.isSelected() && jtxtCreditNoteNumber.getText().isEmpty()) {
+            if (isSave == 0) {
+                JOptionPane.showMessageDialog(null, "Не може да сторнирате продажба, която не е записана!");
+            } else {
+                GenerateCreditNote();
+            }
+        }
+    }//GEN-LAST:event_jtxtCreditNoteNumberFocusGained
+
+    private void jbtnSaveDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnSaveDialogActionPerformed
+        if (jtxtInvoiceNumberDialog.getText().isEmpty() && jcbPaymentType.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
+        } else if (!jchbReversal.isSelected()) {
+            InsertUpdateInvoice();
+            checkInvoiceNumber = 0;
+            jtxtInvoiceNumberDialog.setEditable(false);
+            Date date = jDateInvoice.getDate();
+            String year = String.format("%1$tY", date);
+            String dateInvoice = new SimpleDateFormat("dd.MM.yyyy").format(date);
+            if (SALE.jtxtInvoiceNumber.getText().isEmpty()) {
+                SALE.jtxtInvoiceNumber.setText(year + "-" + jtxtInvoiceNumberDialog.getText() + "/" + dateInvoice);
+            }
+            SALE.jcbPayment.getModel().setSelectedItem(SALE.jcbPaymentType.getModel().getSelectedItem());
+        } else if (jchbReversal.isSelected()) {
+            if (jtxtCreditNoteNumber.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Моля попълнете номер на кредитно известие!");
+            } else {
+                try {
+                    Connection con = getConnection();
+                    PreparedStatement ps = con.prepareStatement("update or insert into CREDIT_NOTES (ID, CR_NOTE_NUMBER, CR_NOTE_DATE, CR_NOTE_TEXT)\n"
+                            + "values (?, ?, ?, ?) matching (ID, CR_NOTE_NUMBER)");
+                    ps.setInt(1, creditID);
+                    ps.setString(2, jtxtCreditNoteNumber.getText());
+                    java.sql.Date sqldate = new java.sql.Date(jCreditNoteDate.getDate().getTime());
+                    ps.setDate(3, sqldate);
+                    ps.setString(4, jTextArea1.getText());
+                    ps.executeUpdate();
+                    InsertUpdateInvoice();
+                    this.DialogInvoice.setVisible(false);
+
+                } catch (HeadlessException | SQLException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_jbtnSaveDialogActionPerformed
+
+    private void jbtnCloseDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCloseDialogActionPerformed
+        DialogInvoice.setVisible(false);
+    }//GEN-LAST:event_jbtnCloseDialogActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2275,7 +2399,7 @@ public class SALE extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private static javax.swing.JTable jTable1;
     public javax.swing.JTextArea jTextArea1;
-    private javax.swing.JButton jbntInvoice;
+    public javax.swing.JButton jbntInvoice;
     public javax.swing.JButton jbtnAdd;
     public javax.swing.JButton jbtnClear;
     private javax.swing.JButton jbtnClose;
@@ -2297,6 +2421,7 @@ public class SALE extends javax.swing.JFrame {
     private static javax.swing.JComboBox<String> jcbPaymentType;
     public javax.swing.JComboBox<String> jcbStatuses;
     public javax.swing.JCheckBox jchbReversal;
+    public com.toedter.calendar.JDateChooser jdtchCredit;
     private javax.swing.JLabel jlbArticle;
     private javax.swing.JLabel jlbArticleGroup;
     private javax.swing.JLabel jlbAvailability;
@@ -2304,16 +2429,18 @@ public class SALE extends javax.swing.JFrame {
     private javax.swing.JLabel jlbChannel;
     private javax.swing.JLabel jlbChannelCosts;
     private javax.swing.JLabel jlbClient;
+    public javax.swing.JLabel jlbCredit;
+    public javax.swing.JLabel jlbCreditDate;
     public javax.swing.JLabel jlbCreditNote;
-    private javax.swing.JLabel jlbCreditNoteNumber;
-    private javax.swing.JLabel jlbCreditNoteText;
+    public javax.swing.JLabel jlbCreditNoteNumber;
+    public javax.swing.JLabel jlbCreditNoteText;
     private javax.swing.JLabel jlbDate;
-    private javax.swing.JLabel jlbDateCreditNote;
+    public javax.swing.JLabel jlbDateCreditNote;
     private javax.swing.JLabel jlbDealType;
-    private javax.swing.JLabel jlbInvoice;
+    public javax.swing.JLabel jlbInvoice;
     private javax.swing.JLabel jlbInvoiceDate;
     private javax.swing.JLabel jlbInvoiceNumber;
-    private javax.swing.JLabel jlbInvoiceNumbers;
+    public javax.swing.JLabel jlbInvoiceNumbers;
     private javax.swing.JLabel jlbLang;
     private javax.swing.JLabel jlbLot;
     private javax.swing.JLabel jlbOtherCosts;
@@ -2322,7 +2449,7 @@ public class SALE extends javax.swing.JFrame {
     private javax.swing.JLabel jlbPaymentType;
     private javax.swing.JLabel jlbPrice;
     private javax.swing.JLabel jlbQty;
-    private javax.swing.JLabel jlbSale;
+    public javax.swing.JLabel jlbSale;
     private javax.swing.JLabel jlbSaleNumber;
     private javax.swing.JLabel jlbStatus;
     private javax.swing.JLabel jlbTotalWithVat;
@@ -2346,5 +2473,6 @@ public class SALE extends javax.swing.JFrame {
     private javax.swing.JTextField jtxtTotalWoVat;
     public javax.swing.JTextField jtxtTransportCosts;
     private javax.swing.JTextField jtxtVatValue;
+    public javax.swing.JTextField jxtCredit;
     // End of variables declaration//GEN-END:variables
 }

@@ -42,6 +42,31 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiDeliveryActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jbtnOffer">
+              <Properties>
+                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
+                  <KeyStroke key="Ctrl+O"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/mainForm/offer 32x32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x41e;&#x444;&#x435;&#x440;&#x442;&#x430;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnOfferActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jbtnCredit">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/mainForm/creditNote 32x32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x41a;&#x440;&#x435;&#x434;&#x438;&#x442;&#x43d;&#x43e; &#x438;&#x437;&#x432;&#x435;&#x441;&#x442;&#x438;&#x435;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnCreditActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jmSales">
@@ -91,6 +116,28 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiSaleArticlesActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiCreditReports">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/mainForm/report32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x421;&#x442;&#x43e;&#x440;&#x43d;&#x438;&#x440;&#x430;&#x43d;&#x438; &#x43f;&#x440;&#x43e;&#x434;&#x430;&#x436;&#x431;&#x438;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiCreditReportsActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiOfferReports">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/mainForm/report32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x41e;&#x444;&#x435;&#x440;&#x442;&#x438;"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiOfferReportsActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -214,7 +261,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/mainForm/report32.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x421;&#x442;&#x43e;&#x440;&#x43d;&#x438;&#x440;&#x430;&#x43d;&#x438;"/>
+                <Property name="text" type="java.lang.String" value="&#x421;&#x442;&#x43e;&#x440;&#x43d;&#x438;&#x440;&#x430;&#x43d;&#x438; (&#x41d;&#x435; &#x441;&#x435; &#x43f;&#x43e;&#x434;&#x434;&#x44a;&#x440;&#x436;&#x430;)!!!"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiReversalActionPerformed"/>
@@ -456,7 +503,11 @@
                   <Component id="jbtnFastSale" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jbtnFastDelivery" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jfbOffer" min="-2" pref="64" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="jfbCreditNote" min="-2" pref="64" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jbtnFastClient" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jbtnFastArticle" min="-2" max="-2" attributes="0"/>
@@ -464,7 +515,7 @@
                   <Component id="jtbnFastPriceLists" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jbtnFastFirm" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="309" max="32767" attributes="0"/>
+                  <EmptySpace pref="155" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jUser" max="32767" attributes="0"/>
                       <Component id="jDate" min="-2" pref="219" max="-2" attributes="0"/>
@@ -494,6 +545,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jDate" max="32767" attributes="0"/>
                       </Group>
+                      <Component id="jfbOffer" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jfbCreditNote" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -595,6 +648,30 @@
             <Property name="text" type="java.lang.String" value="&#x414;&#x430;&#x442;&#x430;"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jfbOffer">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/mainForm/offer 32x32.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41e;&#x444;&#x435;&#x440;&#x442;&#x430;!"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jfbOfferActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jfbCreditNote">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/mainForm/creditNote 32x32.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="&#x41a;&#x440;&#x435;&#x434;&#x438;&#x442;&#x43d;&#x43e; &#x438;&#x437;&#x432;&#x435;&#x441;&#x442;&#x438;&#x435;!"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jfbCreditNoteActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

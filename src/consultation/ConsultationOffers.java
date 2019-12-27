@@ -5,6 +5,10 @@
  */
 package consultation;
 
+import Tools.DropDown;
+import static Tools.ExcelExporter.ExcelExport;
+import static Tools.GetSQL.getSQL;
+import static Tools.getConnection.getConnection;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -29,26 +33,19 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import static Tools.getConnection.getConnection;
-import Tools.DropDown;
-import static Tools.ExcelExporter.ExcelExport;
-import static Tools.GetSQL.getSQL;
-import static Tools.setValuesComboBox.setValuesComboBox;
-import javax.swing.JSpinner;
 import sale.SALE;
-
 /**
  *
  * @author Viko
  */
-public class ConsultationSales extends javax.swing.JFrame {
+public class ConsultationOffers extends javax.swing.JFrame {
 
     public int Type = 1; // for type of report
 
     /**
      * Creates new form ConsultationSales
      */
-    public ConsultationSales() {
+    public ConsultationOffers() {
         initComponents();
         Date date = new Date();
         jdFromDate.setDate(date);
@@ -58,18 +55,53 @@ public class ConsultationSales extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         jTable1.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         jTable1.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        jTable1.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
         TableColumn dealValue = jTable1.getColumnModel().getColumn(8);
         TableColumn ValueVat = jTable1.getColumnModel().getColumn(9);
         dealValue.setCellRenderer(new DecimalFormatRenderer());
         ValueVat.setCellRenderer(new DecimalFormatRenderer());
-        // set comboBox Channels
-        setValuesComboBox("select NC.ID, NC.NAME CHANNELS from N_CHANNELS NC", jcbChannels, false, 0, true);
-        // set comboBox Payments
-        setValuesComboBox("select NPM.ID, NPM.NAME_ENG from  N_PAYMENT_METHODS NPM", jcbPayment, false, 0, true);
-        // set comboBox DealType
-        setValuesComboBox("select DT.ID, DT.NAME DEAL_TYPE from N_DEAL_TYPES DT", jcbDealType, false, 0, true);
+        setValuesChannelType();
+        setValuesDealType();
         jTable1.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 12));
 
+    }
+
+    private void setValuesChannelType() {
+        try {
+
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("select NC.ID, NC.NAME CHANNELS from N_CHANNELS NC");
+            ResultSet rs = ps.executeQuery();
+            jcbChannels.removeAllItems();
+            Vector<DropDown> vector = new Vector<>();
+            vector.addElement(new DropDown(-1, "Всички"));
+            while (rs.next()) {
+                vector.addElement(new DropDown(rs.getInt(1), rs.getString(2)));
+            }
+            jcbChannels.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        jcbChannels.setSelectedIndex(0);
+    }
+
+    private void setValuesDealType() {
+        try {
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("select DT.ID, DT.NAME DEAL_TYPE from N_DEAL_TYPES DT");
+            ResultSet rs = ps.executeQuery();
+            jcbDealType.removeAllItems();
+            Vector<DropDown> vector = new Vector<>();
+            vector.addElement(new DropDown(-1, "Всички"));
+
+            while (rs.next()) {
+                vector.addElement(new DropDown(rs.getInt(1), rs.getString(2)));
+            }
+            jcbDealType.setModel(new DefaultComboBoxModel(vector));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        jcbDealType.setSelectedIndex(0);
     }
 
     SALE sale = new SALE();
@@ -79,19 +111,16 @@ public class ConsultationSales extends javax.swing.JFrame {
         Connection con = getConnection();
         java.sql.Date sqldateFrom = new java.sql.Date(jdFromDate.getDate().getTime());
         java.sql.Date sqldateTo = new java.sql.Date(jdToDate.getDate().getTime());
-        String sql = getSQL(6);
+        String sql = getSQL(10);
         PreparedStatement ps = con.prepareStatement(sql);
-
         ps.setInt(1, Type);
         ps.setDate(2, sqldateFrom);
         ps.setDate(3, sqldateTo);
         ps.setInt(4, ((DropDown) jcbChannels.getSelectedItem()).getId());
         ps.setInt(5, ((DropDown) jcbChannels.getSelectedItem()).getId());
 
-        ps.setInt(6, ((DropDown) jcbPayment.getSelectedItem()).getId());
-        ps.setInt(7, ((DropDown) jcbPayment.getSelectedItem()).getId());
-        ps.setInt(8, ((DropDown) jcbDealType.getSelectedItem()).getId());
-        ps.setInt(9, ((DropDown) jcbDealType.getSelectedItem()).getId());
+        ps.setInt(6, ((DropDown) jcbDealType.getSelectedItem()).getId());
+        ps.setInt(7, ((DropDown) jcbDealType.getSelectedItem()).getId());
         ResultSet rs = ps.executeQuery();
         try {
 
@@ -99,14 +128,14 @@ public class ConsultationSales extends javax.swing.JFrame {
             while (rs.next()) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String saleDate = dateFormat.format(rs.getDate("DEAL_DATE"));
-                sales = new ConsultationDeals(rs.getInt("DEAL_NUMBER"), rs.getString("INVOICE_NUMBER"), saleDate,
+                sales = new ConsultationDeals(rs.getInt("DEAL_NUMBER"), "------", saleDate,
                         rs.getString("CLIENT"), rs.getDouble("DEAL_VALUE"), rs.getString("CHANNEL"),
-                        rs.getString("COUNTRY"), rs.getString("PAYMENTS"), rs.getString("DEAL_TYPE"), rs.getDouble("VALUE_VAT"));
+                        rs.getString("COUNTRY"), "------", rs.getString("DEAL_TYPE"), rs.getDouble("VALUE_VAT"));
                 salesList.add(sales);
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationOffers.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return salesList;
@@ -137,6 +166,11 @@ public class ConsultationSales extends javax.swing.JFrame {
 
     private void showMaster() {
         sale.jtxtSaleNumber.setBackground(Color.white);
+        sale.jlbSale.setText("Оферта");
+        sale.setTitle("Оферта");
+        sale.jbntInvoice.setEnabled(false);
+        sale.isOffer = 1;
+        sale.isSave = 1; // only for test check this!!!!
         try {
             Connection con = getConnection();
             int row = jTable1.getSelectedRow();
@@ -144,7 +178,7 @@ public class ConsultationSales extends javax.swing.JFrame {
 
             PreparedStatement ps = con.prepareStatement("select\n"
                     + " D.ID, D.DEAL_NUMBER, D.DEAL_DATE, D.OPERATION_ID, O.NAME OPERATION,\n"
-                    + " D.DEAL_TYPE_ID, DT.NAME DEAL_TYPE, D.CREDIT_DEAL_NUMBER, D.CREDIT_DEAL_DATE,\n"
+                    + " D.DEAL_TYPE_ID, DT.NAME DEAL_TYPE,\n"
                     + " D.CHANNEL_ID, C.NAME CHANNEL, D.STATUS_ID, S.NAME STATUS, D.CLIENT_ID, CC.NAME CLIENT,\n"
                     + " D.LANG_ID LANG_ID, L.SHORT_NAME LANG, D.DEAL_VALUE,\n"
                     + " D.TRANSPORT_COSTS, D.CHANNEL_COSTS, D.BANK_COSTS, D.OTHER_COSTS, I.INVOICE_NUMBER, I.PAYMENT_ID, I.PAYMENT_TEXT,\n"
@@ -167,7 +201,8 @@ public class ConsultationSales extends javax.swing.JFrame {
                     + "  left join N_PAYMENT_METHODS P on P.ID = I.PAYMENT_ID\n"
                     + "  left join CREDIT_NOTES CN on CN.ID = I.CREDIT_NOTE_ID\n"
                     + " where\n"
-                    + "  (D.OPERATION_ID = ? or D.OPERATION_ID = 6) and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0));
+                    + "  D.OPERATION_ID = ? and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0)); // Make Deal_number parameter
+            // TODO: Must make INVOICE_NUMBER, because when reset generator........ or Add OPERATION_TYPE
             ps.setInt(1, Type);
             ResultSet rs = ps.executeQuery();
             Vector<DropDown> dealType = new Vector<>();
@@ -197,7 +232,6 @@ public class ConsultationSales extends javax.swing.JFrame {
                 jStatus.setModel(new DefaultComboBoxModel(status));
                 jLang.setModel(new DefaultComboBoxModel(lang));
                 jPayment.setModel(new DefaultComboBoxModel(payment));
-
                 sale.jcbChannel.setSelectedIndex(0);
                 sale.jtxtSaleNumber.setText(rs.getString("DEAL_NUMBER"));
                 sale.jDateSale.setDate(rs.getDate("DEAL_DATE"));
@@ -216,12 +250,8 @@ public class ConsultationSales extends javax.swing.JFrame {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 String saleDate = dateFormat.format(rs.getDate("DEAL_DATE"));
                 sale.jtxtInvoiceNumber.setText(rs.getString("INVOICE_NUMBER") + "/" + saleDate);
-                sale.jtxtInvoiceNumberDialog.setText(rs.getString("INVOICE_NUMBER"));
                 sale.jcbPayment.getModel().setSelectedItem(jPayment.getModel().getSelectedItem());
                 sale.jtaPaymentText.setText(rs.getString("PAYMENT_TEXT"));
-
-                sale.jxtCredit.setText(rs.getString("CREDIT_DEAL_NUMBER"));
-                sale.jdtchCredit.setDate(rs.getDate("CREDIT_DEAL_DATE"));
 
                 sale.jlbVatValue.setText("ДДС (" + sale.VatPCT + "%): ");
                 if (((DropDown) sale.jcbStatuses.getSelectedItem()).getId() == 4) {
@@ -229,6 +259,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                     sale.jpCreditNote.setVisible(true);
                     sale.jCreditNoteDate.setDate(rs.getDate("CR_NOTE_DATE"));
                     sale.jtxtCreditNoteNumber.setText(rs.getString("CR_NOTE_NUMBER"));
+                    //sale.jtxtCreditNoteNumber.setBackground(Color.white);
                     sale.jTextArea1.setText(rs.getString("CR_NOTE_TEXT"));
                     sale.creditID = rs.getInt("CREDIT_ID");
                 } else {
@@ -247,16 +278,16 @@ public class ConsultationSales extends javax.swing.JFrame {
                 payment.clear();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationOffers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void showDetails() {
         try {
             Connection con = getConnection();
+
             int row = jTable1.getSelectedRow();
             int correctModel = jTable1.convertRowIndexToModel(row);
-
             PreparedStatement ps = con.prepareStatement("select\n"
                     + "  AG.ID ARTICLE_GROUP_ID,\n"
                     + "  case\n"
@@ -278,7 +309,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                     + "  join ARTICLE_GROUPS AG on AG.ID = A.ARTICLE_GROUPS_ID\n"
                     + "  join LOTS L on L.ID = DD.LOT_ID\n"
                     + "where\n"
-                    + "  (D.OPERATION_ID = ? or D.OPERATION_ID = 6) and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0) + " order by A.ID desc");
+                    + "  D.OPERATION_ID = ? and D.DEAL_NUMBER = " + jTable1.getModel().getValueAt(correctModel, 0) + " order by A.ID desc");
             ps.setInt(1, Type);
             ResultSet rs = ps.executeQuery();
             Vector<DropDown> article = new Vector<>();
@@ -298,11 +329,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 sale.jcbLots.getModel().setSelectedItem(jLot.getModel().getSelectedItem());
                 sale.jtxtPrice.setText(rs.getString("DVY_PRICE_WITH_VAT"));
 
-                int qty = rs.getInt("QUANTITY");
-                if ((Double) jTable1.getValueAt(correctModel, 8) < 0) {
-                    qty *= -1;
-                }
-                sale.jtxtQty.setValue(qty);
+                sale.jtxtQty.setValue(rs.getInt("QUANTITY"));
 
                 sale.jbtnAdd.doClick();
 
@@ -311,7 +338,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 lot.clear();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationOffers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -363,10 +390,8 @@ public class ConsultationSales extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jbtnExport = new javax.swing.JButton();
         jcbChannels = new javax.swing.JComboBox<>();
-        jcbPayment = new javax.swing.JComboBox<>();
         jcbDealType = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -385,7 +410,7 @@ public class ConsultationSales extends javax.swing.JFrame {
         });
         jPopupMenu1.add(jmiDelete);
 
-        setTitle("Продажби");
+        setTitle("Оферти");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -394,7 +419,7 @@ public class ConsultationSales extends javax.swing.JFrame {
         });
 
         jlbConsultation.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jlbConsultation.setText("Продажби");
+        jlbConsultation.setText("Оферти");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultation/run24 (2).png"))); // NOI18N
         jButton1.setText("Изпълни");
@@ -418,8 +443,6 @@ public class ConsultationSales extends javax.swing.JFrame {
 
         jLabel1.setText("Канал:");
 
-        jLabel3.setText("Плащане:");
-
         jLabel4.setText("ДДС категория:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -440,15 +463,11 @@ public class ConsultationSales extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(jcbChannels, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jcbPayment, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jcbDealType, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(55, 55, 55)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jbtnExport)
@@ -458,37 +477,36 @@ public class ConsultationSales extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jbtnExport))
-                        .addGap(23, 23, 23))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGap(0, 1, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jButton1)
+                                    .addComponent(jbtnExport))
+                                .addGap(23, 23, 23))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlbFromDate)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jdToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jdFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jcbChannels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jcbDealType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jcbPayment, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(28, 28, 28))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jlbFromDate)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jdToDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jdFromDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jcbChannels, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(28, 28, 28))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jcbDealType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         jTable1.setAutoCreateRowSorter(true);
@@ -522,9 +540,9 @@ public class ConsultationSales extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(60);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(60);
             jTable1.getColumnModel().getColumn(2).setPreferredWidth(90);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(150);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(130);
             jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(70);
             jTable1.getColumnModel().getColumn(7).setPreferredWidth(100);
             jTable1.getColumnModel().getColumn(9).setPreferredWidth(120);
         }
@@ -578,7 +596,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                         .addComponent(jtxtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(66, 66, 66)
                         .addComponent(jtxtTotalVat, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69))))
+                        .addGap(60, 60, 60))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -589,13 +607,13 @@ public class ConsultationSales extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jtxtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtxtTotalVat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addGap(32, 32, 32)
                 .addComponent(jbtnClose)
                 .addGap(21, 21, 21))
         );
@@ -612,7 +630,7 @@ public class ConsultationSales extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Няма данни по зададените критерии!");
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ConsultationSales.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConsultationOffers.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -622,33 +640,6 @@ public class ConsultationSales extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         if (evt.getClickCount() == 2) {
-            sale.isCreditNote = 0;
-            sale.jlbSale.setText("Продажба");
-            sale.setTitle("Продажба");
-            sale.jlbInvoiceNumbers.setText("Номер и дата на фактура:");
-            sale.jxtCredit.setVisible(false);
-            sale.jdtchCredit.setVisible(false);
-            sale.jlbCredit.setVisible(false);
-            sale.jlbCreditDate.setVisible(false);
-            sale.jbntInvoice.setText("Фактура");
-
-            int row = jTable1.getSelectedRow();
-            int correctModel = jTable1.convertRowIndexToModel(row);
-            if ((Double) jTable1.getValueAt(correctModel, 8) < 0) {
-                sale.jlbSale.setText("Сторнирана продажба");
-                sale.setTitle("Сторнирана продажба");
-                sale.jlbInvoiceNumbers.setText("Номер и дата на КИ:");
-                sale.isCreditNote = 1;
-                JSpinner.NumberEditor editor = new JSpinner.NumberEditor(sale.jtxtQty, "-#");
-                sale.jtxtQty.setEditor(editor);
-                sale.jxtCredit.setVisible(true);
-                sale.jdtchCredit.setVisible(true);
-                sale.jlbCredit.setVisible(true);
-                sale.jlbCreditDate.setVisible(true);
-                sale.jbntInvoice.setText("КИ");
-                sale.jxtCredit.setBackground(Color.CYAN);
-            }
-
             sale.checkQuantity = 0; // This is flag for check for availability quantity and sale quantity!!!!!   
             showMaster();
             showDetails();
@@ -671,19 +662,20 @@ public class ConsultationSales extends javax.swing.JFrame {
                 sale.jbtnSave.setEnabled(false);
             }
             sale.isSave = 1;
-            sale.checkQuantity = 1; // This is flag for check for availability quantity and sale quantity!!!!!       
+            sale.checkQuantity = 1; // This is flag for check for availability quantity and sale quantity!!!!!
         }
     }//GEN-LAST:event_jTable1MouseClicked
     private void jbtnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExportActionPerformed
         String Date = new SimpleDateFormat("dd.MM.yyyy HH.mm.ss").format(Calendar.getInstance().getTime());
         File directory = new File(".");
         String absolutePath = directory.getAbsolutePath().substring(0, directory.getAbsolutePath().length() - 1);
-        String fileName = absolutePath + "Reports\\Sales " + Date;
+        String fileName = absolutePath + "Reports\\Offers " + Date;
         if (ExcelExport(jTable1, fileName)) {
             JOptionPane.showMessageDialog(this, "Успешно експортиране!");
         } else {
             JOptionPane.showMessageDialog(this, "Възникна грешка!");
         }
+
     }//GEN-LAST:event_jbtnExportActionPerformed
 
     private void jTable1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseReleased
@@ -693,17 +685,17 @@ public class ConsultationSales extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseReleased
 
     private void jmiDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiDeleteActionPerformed
-        int dialogButton = JOptionPane.showConfirmDialog(null, "Сигурни ли сте, че искате да изтриете продажбата!", "Справки", JOptionPane.YES_NO_OPTION);
+        int dialogButton = JOptionPane.showConfirmDialog(null, "Сигурни ли сте, че искате да изтриете офертата!", "Справки", JOptionPane.YES_NO_OPTION);
         if (dialogButton == JOptionPane.YES_OPTION) {
             try {
                 Connection con = getConnection();
                 PreparedStatement ps = con.prepareStatement("delete from DEALS D\n"
-                        + "where (D.DEAL_NUMBER = ? and D.OPERATION_ID = 1)");
+                        + "where (D.DEAL_NUMBER = ? and D.OPERATION_ID = 5)");
                 ps.setString(1, jTable1.getModel().getValueAt(jTable1.getSelectedRow(), 0).toString());
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Успешно изтрихте продажбата!");
+                JOptionPane.showMessageDialog(null, "Успешно изтрихте офертата!");
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Не може да изтриете тази продажба!");
+                JOptionPane.showMessageDialog(null, "Не може да изтриете тази оферта!");
             }
             if (dialogButton == JOptionPane.NO_OPTION) {
                 remove(dialogButton);
@@ -732,20 +724,23 @@ public class ConsultationSales extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationOffers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationOffers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationOffers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ConsultationSales.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ConsultationOffers.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultationSales().setVisible(true);
+                new ConsultationOffers().setVisible(true);
             }
         });
     }
@@ -782,7 +777,6 @@ public class ConsultationSales extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jGroup;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JComboBox<String> jLang;
@@ -799,7 +793,6 @@ public class ConsultationSales extends javax.swing.JFrame {
     private javax.swing.JButton jbtnExport;
     private javax.swing.JComboBox<String> jcbChannels;
     private javax.swing.JComboBox<String> jcbDealType;
-    private javax.swing.JComboBox<String> jcbPayment;
     public com.toedter.calendar.JDateChooser jdFromDate;
     public com.toedter.calendar.JDateChooser jdToDate;
     public javax.swing.JLabel jlbConsultation;

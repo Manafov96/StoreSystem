@@ -521,8 +521,10 @@ public class Delivery extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
 
         DialogInvoice.setTitle("Фактура");
-        DialogInvoice.setMinimumSize(new java.awt.Dimension(488, 650));
+        DialogInvoice.setMaximumSize(new java.awt.Dimension(450, 450));
+        DialogInvoice.setMinimumSize(new java.awt.Dimension(450, 450));
         DialogInvoice.setModalityType(java.awt.Dialog.ModalityType.APPLICATION_MODAL);
+        DialogInvoice.setPreferredSize(new java.awt.Dimension(450, 450));
 
         jlbInvoice.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jlbInvoice.setText("Фактура");
@@ -656,14 +658,14 @@ public class Delivery extends javax.swing.JFrame {
                             .addComponent(jlbPaymentText)
                             .addComponent(jchbReversal)))
                     .addGroup(DialogInvoiceLayout.createSequentialGroup()
-                        .addGap(116, 116, 116)
+                        .addGap(60, 60, 60)
+                        .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(DialogInvoiceLayout.createSequentialGroup()
+                        .addGap(97, 97, 97)
                         .addComponent(jbtnSaveDialog)
                         .addGap(30, 30, 30)
-                        .addComponent(jbtnCloseDialog))
-                    .addGroup(DialogInvoiceLayout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(93, Short.MAX_VALUE))
+                        .addComponent(jbtnCloseDialog)))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         DialogInvoiceLayout.setVerticalGroup(
             DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -691,12 +693,12 @@ public class Delivery extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jchbReversal)
                 .addGap(18, 18, 18)
-                .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addComponent(jpCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(DialogInvoiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnSaveDialog)
                     .addComponent(jbtnCloseDialog))
-                .addGap(22, 22, 22))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         jPopUpDelDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sale/delete16.png"))); // NOI18N
@@ -796,7 +798,7 @@ public class Delivery extends javax.swing.JFrame {
                     .addComponent(jlbLang))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlbDeliveryNumber)
                     .addComponent(jtxtDeliveryNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -804,11 +806,11 @@ public class Delivery extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jDateDelivery, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jlbDate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlbDealType)
                     .addComponent(jcbDealType, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jlbSupplier)
                     .addComponent(jcbSupplier, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))

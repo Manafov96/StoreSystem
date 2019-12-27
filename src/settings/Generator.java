@@ -5,6 +5,7 @@
  */
 package settings;
 
+import static Tools.getConnection.getConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,7 +13,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
-import static Tools.getConnection.getConnection;
 
 /**
  *
@@ -26,6 +26,7 @@ public class Generator extends javax.swing.JFrame {
     public Generator() {
         initComponents();
         getGenNumber();
+        getCreditGenNumber();
     }
 
     private void getGenNumber() {
@@ -37,7 +38,23 @@ public class Generator extends javax.swing.JFrame {
                 jSpGenNumber.setValue(rs.getInt("GEN_ID"));
                 String Date = new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime());
                 int nextNumber = (Integer) jSpGenNumber.getValue() + 1;
-                jlbNextNumber.setText("Следваща фактура: " + Date +  " - " + nextNumber);
+                jlbNextNumber.setText("Следваща фактура: " + Date + " - " + nextNumber);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void getCreditGenNumber() {
+        try {
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("select gen_id(CREDIT_NUMBER_GEN, 0) from RDB$DATABASE");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                jSpGenNumber1.setValue(rs.getInt("GEN_ID"));
+                String Date = new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime());
+                int nextNumber = (Integer) jSpGenNumber1.getValue() + 1;
+                jlbNextNumber1.setText("Следващo КИ: " + Date + " - " + nextNumber);
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -48,6 +65,16 @@ public class Generator extends javax.swing.JFrame {
         try {
             Connection con = getConnection();
             PreparedStatement ps = con.prepareStatement("ALTER SEQUENCE INVOICE_NUMBER_GEN RESTART WITH " + jSpGenNumber.getValue());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    private void updateCreditGenNumber() {
+        try {
+            Connection con = getConnection();
+            PreparedStatement ps = con.prepareStatement("ALTER SEQUENCE CREDIT_NUMBER_GEN RESTART WITH " + jSpGenNumber1.getValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
@@ -69,6 +96,11 @@ public class Generator extends javax.swing.JFrame {
         jbtnExit = new javax.swing.JButton();
         jSpGenNumber = new javax.swing.JSpinner();
         jlbNextNumber = new javax.swing.JLabel();
+        jlbNextNumber1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jSpGenNumber1 = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setTitle("Номер на фактура");
 
@@ -98,6 +130,14 @@ public class Generator extends javax.swing.JFrame {
 
         jlbNextNumber.setText("Следващ номер:");
 
+        jlbNextNumber1.setText("Следващ номер:");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
+        jLabel3.setText("Текущ номер :");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel4.setText("Номер на КИ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -112,13 +152,22 @@ public class Generator extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jSpGenNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jSpGenNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jlbNextNumber1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jSpGenNumber1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jLabel4))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addComponent(jbtnSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jbtnExit)))
                 .addContainerGap(52, Short.MAX_VALUE))
+            .addComponent(jSeparator1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,9 +178,19 @@ public class Generator extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jSpGenNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
                 .addComponent(jlbNextNumber)
-                .addGap(30, 30, 30)
+                .addGap(17, 17, 17)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jSpGenNumber1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(jlbNextNumber1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtnSave)
                     .addComponent(jbtnExit))
@@ -151,6 +210,8 @@ public class Generator extends javax.swing.JFrame {
         if (dialogButton == JOptionPane.YES_OPTION) {
             updateGenNumber();
             getGenNumber();
+            updateCreditGenNumber();
+            getCreditGenNumber();
             if (dialogButton == JOptionPane.NO_OPTION) {
                 remove(dialogButton);
             }
@@ -183,6 +244,7 @@ public class Generator extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Generator.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -195,9 +257,14 @@ public class Generator extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner jSpGenNumber;
+    private javax.swing.JSpinner jSpGenNumber1;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnSave;
     private javax.swing.JLabel jlbNextNumber;
+    private javax.swing.JLabel jlbNextNumber1;
     // End of variables declaration//GEN-END:variables
 }

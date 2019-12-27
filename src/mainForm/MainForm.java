@@ -29,8 +29,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import priceLists.PriceLists;
@@ -38,7 +36,11 @@ import sale.SALE;
 import settings.Countries;
 import login.Login;
 import static Tools.getConnection.getConnection;
+import consultation.ConsultationCreditNotes;
+import consultation.ConsultationOffers;
 import consultation.SQLconsole;
+import java.awt.Color;
+import javax.swing.JSpinner;
 import settings.Channels;
 import settings.DealTypes;
 import settings.Generator;
@@ -107,6 +109,8 @@ public class MainForm extends javax.swing.JFrame {
         jbtnFastSale = new javax.swing.JButton();
         jUser = new javax.swing.JLabel();
         jDate = new javax.swing.JLabel();
+        jfbOffer = new javax.swing.JButton();
+        jfbCreditNote = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jPicture = new javax.swing.JLabel();
@@ -114,11 +118,15 @@ public class MainForm extends javax.swing.JFrame {
         jmOperaction = new javax.swing.JMenu();
         jmiSale = new javax.swing.JMenuItem();
         jmiDelivery = new javax.swing.JMenuItem();
+        jbtnOffer = new javax.swing.JMenuItem();
+        jbtnCredit = new javax.swing.JMenuItem();
         jmSales = new javax.swing.JMenu();
         jmiSaleDay = new javax.swing.JMenuItem();
         jmiSaleMonth = new javax.swing.JMenuItem();
         jmiSaleYear = new javax.swing.JMenuItem();
         jmiSaleArticles = new javax.swing.JMenuItem();
+        jmiCreditReports = new javax.swing.JMenuItem();
+        jmiOfferReports = new javax.swing.JMenuItem();
         jmDelivery = new javax.swing.JMenu();
         jmiDeliveryMonth = new javax.swing.JMenuItem();
         jmiDeliveryYear = new javax.swing.JMenuItem();
@@ -218,6 +226,24 @@ public class MainForm extends javax.swing.JFrame {
         jDate.setText("Дата");
         jDate.setToolTipText("");
 
+        jfbOffer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/offer 32x32.png"))); // NOI18N
+        jfbOffer.setToolTipText("Оферта!");
+        jfbOffer.setFocusPainted(false);
+        jfbOffer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfbOfferActionPerformed(evt);
+            }
+        });
+
+        jfbCreditNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/creditNote 32x32.png"))); // NOI18N
+        jfbCreditNote.setToolTipText("Кредитно известие!");
+        jfbCreditNote.setFocusPainted(false);
+        jfbCreditNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jfbCreditNoteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -227,7 +253,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jbtnFastSale)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnFastDelivery)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jfbOffer, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jfbCreditNote, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnFastClient)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnFastArticle)
@@ -235,7 +265,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jtbnFastPriceLists)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnFastFirm)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 309, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jDate, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -258,7 +288,9 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jUser)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jfbOffer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jfbCreditNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         jPicture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -304,6 +336,25 @@ public class MainForm extends javax.swing.JFrame {
         });
         jmOperaction.add(jmiDelivery);
 
+        jbtnOffer.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jbtnOffer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/offer 32x32.png"))); // NOI18N
+        jbtnOffer.setText("Оферта");
+        jbtnOffer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnOfferActionPerformed(evt);
+            }
+        });
+        jmOperaction.add(jbtnOffer);
+
+        jbtnCredit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/creditNote 32x32.png"))); // NOI18N
+        jbtnCredit.setText("Кредитно известие");
+        jbtnCredit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnCreditActionPerformed(evt);
+            }
+        });
+        jmOperaction.add(jbtnCredit);
+
         jMenuBar1.add(jmOperaction);
 
         jmSales.setText("ПРОДАЖБИ");
@@ -343,6 +394,24 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         jmSales.add(jmiSaleArticles);
+
+        jmiCreditReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/report32.png"))); // NOI18N
+        jmiCreditReports.setText("Сторнирани продажби");
+        jmiCreditReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiCreditReportsActionPerformed(evt);
+            }
+        });
+        jmSales.add(jmiCreditReports);
+
+        jmiOfferReports.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/report32.png"))); // NOI18N
+        jmiOfferReports.setText("Оферти");
+        jmiOfferReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiOfferReportsActionPerformed(evt);
+            }
+        });
+        jmSales.add(jmiOfferReports);
 
         jMenuBar1.add(jmSales);
 
@@ -434,7 +503,7 @@ public class MainForm extends javax.swing.JFrame {
         jmReports.add(jmiMoney);
 
         jmiReversal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/report32.png"))); // NOI18N
-        jmiReversal.setText("Сторнирани");
+        jmiReversal.setText("Сторнирани (Не се поддържа)!!!");
         jmiReversal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiReversalActionPerformed(evt);
@@ -805,7 +874,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jmiDeliveryYearActionPerformed
 
     private void jmiReversalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiReversalActionPerformed
-        ConsultationSales sales = new ConsultationSales();
+/*        ConsultationSales sales = new ConsultationSales();
         Date date = new Date();
         sales.Type = 3;
         sales.jlbConsultation.setText("Сторнирани");
@@ -815,7 +884,8 @@ public class MainForm extends javax.swing.JFrame {
         sales.jdToDate.setDate(date);
         sales.jdFromDate.setDate(firstDayOfYear);
         sales.jButton1.doClick();
-        sales.setVisible(true);
+        sales.setVisible(true);*/
+        JOptionPane.showMessageDialog(this, "Тази функционалност вече не се поддържа!!!");
     }//GEN-LAST:event_jmiReversalActionPerformed
 
     private void jmiCountriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCountriesActionPerformed
@@ -893,6 +963,102 @@ public class MainForm extends javax.swing.JFrame {
        console.setVisible(true);
     }//GEN-LAST:event_jmCustomConsultationActionPerformed
 
+    private void jfbOfferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfbOfferActionPerformed
+        SALE sale = new SALE();
+        sale.jlbSale.setText("Оферта");
+        sale.setTitle("Оферта");
+        sale.jbntInvoice.setEnabled(false);
+        sale.isOffer = 1;
+        //sale.isSave = 1; // only for test check this!!!!
+        sale.jtxtInvoiceNumber.setText("null/");
+        sale.setVisible(true);
+    }//GEN-LAST:event_jfbOfferActionPerformed
+
+    private void jfbCreditNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jfbCreditNoteActionPerformed
+        SALE sale = new SALE();
+        sale.jlbSale.setText("Сторнирана Продажба");
+        sale.setTitle("Сторнирана Продажба");
+        sale.jlbInvoiceNumbers.setText("Номер и дата на КИ:");
+        sale.isCreditNote = 1;
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(sale.jtxtQty, "-#");
+        sale.jtxtQty.setEditor(editor);
+        sale.jxtCredit.setVisible(true);
+        sale.jdtchCredit.setVisible(true);
+        sale.jlbCredit.setVisible(true);
+        sale.jlbCreditDate.setVisible(true);
+        //sale.jbntInvoice.setEnabled(false);
+        sale.jxtCredit.setBackground(Color.CYAN);
+        sale.jbntInvoice.setText("КИ");
+        sale.setVisible(true);
+    }//GEN-LAST:event_jfbCreditNoteActionPerformed
+
+    private void jbtnOfferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnOfferActionPerformed
+        SALE sale = new SALE();
+        sale.jlbSale.setText("Оферта");
+        sale.setTitle("Оферта");
+        sale.jbntInvoice.setEnabled(false);
+        sale.isOffer = 1;
+        //sale.isSave = 1; // only for test check this!!!!
+        sale.jtxtInvoiceNumber.setText("null/");
+        sale.setVisible(true);
+    }//GEN-LAST:event_jbtnOfferActionPerformed
+
+    private void jbtnCreditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCreditActionPerformed
+        SALE sale = new SALE();
+        sale.jlbSale.setText("Сторнирана Продажба");
+        sale.setTitle("Сторнирана Продажба");
+        sale.isCreditNote = 1;
+        sale.jlbInvoiceNumbers.setText("Номер и дата на КИ:");
+        JSpinner.NumberEditor editor = new JSpinner.NumberEditor(sale.jtxtQty, "-#");
+        sale.jtxtQty.setEditor(editor);
+        sale.jtxtQty.setEditor(editor);
+        sale.jxtCredit.setVisible(true);
+        sale.jdtchCredit.setVisible(true);
+        sale.jlbCredit.setVisible(true);
+        sale.jlbCreditDate.setVisible(true);
+        //sale.jbntInvoice.setEnabled(false);
+        sale.jxtCredit.setBackground(Color.CYAN);
+        sale.jbntInvoice.setText("КИ");
+        sale.setVisible(true);
+    }//GEN-LAST:event_jbtnCreditActionPerformed
+
+    private void jmiCreditReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiCreditReportsActionPerformed
+        ConsultationCreditNotes credit = new ConsultationCreditNotes();
+
+        credit.Type = 6;
+
+        Date date = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
+
+        Date firstDayOfMonth = cal.getTime();
+
+        credit.jdToDate.setDate(date);
+        credit.jdFromDate.setDate(firstDayOfMonth);
+        credit.jButton1.doClick();
+        credit.setVisible(true);
+
+    }//GEN-LAST:event_jmiCreditReportsActionPerformed
+
+    private void jmiOfferReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiOfferReportsActionPerformed
+        ConsultationOffers offers = new ConsultationOffers();
+
+        offers.Type = 5;
+
+        Date date = new Date();
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DATE, cal.getActualMinimum(Calendar.DATE));
+
+        Date firstDayOfMonth = cal.getTime();
+
+        offers.jdToDate.setDate(date);
+        offers.jdFromDate.setDate(firstDayOfMonth);
+        offers.jButton1.doClick();
+        offers.setVisible(true);
+    }//GEN-LAST:event_jmiOfferReportsActionPerformed
+
 /**
  * @param args the command line arguments
  */
@@ -950,11 +1116,15 @@ public static void main(String args[]) {
     public static javax.swing.JLabel jPicture;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel jUser;
+    private javax.swing.JMenuItem jbtnCredit;
     private javax.swing.JButton jbtnFastArticle;
     private javax.swing.JButton jbtnFastClient;
     private javax.swing.JButton jbtnFastDelivery;
     public javax.swing.JButton jbtnFastFirm;
     private javax.swing.JButton jbtnFastSale;
+    private javax.swing.JMenuItem jbtnOffer;
+    private javax.swing.JButton jfbCreditNote;
+    private javax.swing.JButton jfbOffer;
     private javax.swing.JMenuItem jmCustomConsultation;
     private javax.swing.JMenu jmDelivery;
     private javax.swing.JMenu jmOperaction;
@@ -967,6 +1137,7 @@ public static void main(String args[]) {
     private javax.swing.JMenuItem jmiClients;
     private javax.swing.JMenuItem jmiClientsReport;
     public javax.swing.JMenuItem jmiCountries;
+    private javax.swing.JMenuItem jmiCreditReports;
     public javax.swing.JMenuItem jmiDealType;
     private javax.swing.JMenuItem jmiDelivery;
     private javax.swing.JMenuItem jmiDeliveryArticles;
@@ -978,6 +1149,7 @@ public static void main(String args[]) {
     public javax.swing.JMenuItem jmiGenerator;
     public javax.swing.JMenuItem jmiMeasure;
     private javax.swing.JMenuItem jmiMoney;
+    private javax.swing.JMenuItem jmiOfferReports;
     public javax.swing.JMenuItem jmiPriceList;
     private javax.swing.JMenuItem jmiReversal;
     private javax.swing.JMenuItem jmiSale;
