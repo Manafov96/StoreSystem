@@ -35,7 +35,6 @@ public class getConnection {
             System.err.println(e.getMessage());
         }
         try {
-           
             con = DriverManager.getConnection("jdbc:firebirdsql://" + server + ":" + port + "/" + file + "?encoding=UTF8;defaultResultSetHoldable=True", "SYSDBA", "masterkey");
             return con;
         } catch (SQLException ex) {

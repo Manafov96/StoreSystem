@@ -17,6 +17,11 @@ import Tools.DropDown;
 import static Tools.setValuesComboBox.setValuesComboBox;
 import sale.SALE;
 import consultation.Clients;
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPMessage;
+import static soap.vies_soap.createSOAPRequest;
+import static soap.vies_soap.printSOAPResponse;
 
 /**
  *
@@ -109,6 +114,12 @@ public class Client extends javax.swing.JFrame {
         jlbAddress.setText("Адрес:");
 
         jlbMOL.setText("МОЛ/email:");
+
+        jtxtVatNumber.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtVatNumberFocusLost(evt);
+            }
+        });
 
         jlbVatNumber.setText("ДДС номер:");
 
@@ -222,7 +233,7 @@ public class Client extends javax.swing.JFrame {
     private void jtbnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtbnSaveActionPerformed
         if (jcbClientType.getSelectedIndex() == -1 || jtxtClientName.getText().isEmpty() || jcbCountries.getSelectedIndex() == -1
                 || jtxtCity.getText().isEmpty() || jtxtAddress.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!");
+            JOptionPane.showMessageDialog(this, "Моля попълнете всички полета!", "Клиенти", JOptionPane.NO_OPTION);
         } else {
             int personValue = 0;
             if (jchbPerson.isSelected()) {
@@ -318,6 +329,43 @@ public class Client extends javax.swing.JFrame {
             jchbPerson.setSelected(true);
         }
     }//GEN-LAST:event_jchbFirmActionPerformed
+
+    private void jtxtVatNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtVatNumberFocusLost
+        if (!jtxtVatNumber.getText().isEmpty()) {
+        try {
+            //String fullVatNumber = "DE308177468";
+            String fullVatNumber = jtxtVatNumber.getText();
+            String countryCode = "";
+            String vatNumber = "";
+            if (fullVatNumber.length() > 2) {
+              countryCode = fullVatNumber.substring(0, 2);
+              vatNumber = fullVatNumber.substring(2, fullVatNumber.length());
+            }
+
+            // Create SOAP Connection
+            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+
+            // Send SOAP Message to SOAP Server
+            String url = "http://ec.europa.eu/taxation_customs/vies/services/checkVatService";
+            SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(countryCode, vatNumber), url);
+
+            // Process the SOAP Response
+            String isValid = printSOAPResponse(soapResponse);
+            String validBG = "";
+            if("true".equals(isValid)) 
+                validBG = "Валиден ДДС номер!";
+            else
+                validBG = "Невалиден ДДС номер!";
+            JOptionPane.showMessageDialog(null, validBG, "Клиенти", JOptionPane.NO_OPTION); 
+            soapConnection.close();
+        } catch (Exception e) {
+            System.err.println("Грешка при изпращането на заявка до сървъра!");
+            JOptionPane.showMessageDialog(null, "Грешка при изпращането на заявка до сървъра!", "Клиенти", JOptionPane.NO_OPTION); 
+            e.printStackTrace();
+        }
+    }
+    }//GEN-LAST:event_jtxtVatNumberFocusLost
 
     /**
      * @param args the command line arguments

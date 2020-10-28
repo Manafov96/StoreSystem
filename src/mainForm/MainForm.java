@@ -46,7 +46,13 @@ import settings.DealTypes;
 import settings.Generator;
 import settings.Measures;
 import settings.PaymentTypes;
-
+import rest.RestService;
+import Tools.ArchiveDataBase;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import jsonImport.jsonImport;
+import org.json.simple.parser.ParseException;
 /**
  *
  * @author Viko
@@ -61,6 +67,7 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         setDate();
         jUser.setText("Потребител: " + Login.user);
+        jmiReversal.setVisible(false);
     }
 
     private void setDate() {
@@ -111,6 +118,8 @@ public class MainForm extends javax.swing.JFrame {
         jDate = new javax.swing.JLabel();
         jfbOffer = new javax.swing.JButton();
         jfbCreditNote = new javax.swing.JButton();
+        jbtnArchiveDb = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jPicture = new javax.swing.JLabel();
@@ -152,6 +161,7 @@ public class MainForm extends javax.swing.JFrame {
         JmiPayments = new javax.swing.JMenuItem();
         jmiCountries = new javax.swing.JMenuItem();
         jmiGenerator = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jMenuItem4.setText("jMenuItem4");
 
@@ -244,6 +254,24 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jbtnArchiveDb.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/Archive32.png"))); // NOI18N
+        jbtnArchiveDb.setToolTipText("Архивиране на базата данни!");
+        jbtnArchiveDb.setFocusPainted(false);
+        jbtnArchiveDb.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnArchiveDbActionPerformed(evt);
+            }
+        });
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/Import32.png"))); // NOI18N
+        jButton1.setToolTipText("Импортиране на данни от уеб магазин!");
+        jButton1.setFocusPainted(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -265,11 +293,14 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(jtbnFastPriceLists)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jbtnFastFirm)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jbtnArchiveDb)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jDate, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(jDate, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,20 +308,22 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbtnFastSale, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbtnFastDelivery, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbtnFastClient, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbtnFastArticle, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jtbnFastPriceLists, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jbtnFastFirm, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jUser)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jfbOffer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jfbCreditNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jfbCreditNote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jbtnFastSale, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jbtnFastDelivery, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jbtnFastClient, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jbtnFastArticle, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jtbnFastPriceLists, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jbtnFastFirm, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jbtnArchiveDb, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
         );
 
         jPicture.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -626,6 +659,15 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         jmSettings.add(jmiGenerator);
+
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/Rest32.png"))); // NOI18N
+        jMenuItem1.setText("REST");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jmSettings.add(jMenuItem1);
 
         jMenuBar1.add(jmSettings);
 
@@ -1059,6 +1101,37 @@ public class MainForm extends javax.swing.JFrame {
         offers.setVisible(true);
     }//GEN-LAST:event_jmiOfferReportsActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+       RestService rest = new RestService();
+       rest.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jbtnArchiveDbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnArchiveDbActionPerformed
+        ArchiveDataBase archivedb = new ArchiveDataBase();
+        try {
+            archivedb.archiveDb();
+            JOptionPane.showMessageDialog(this, "Архива е успешно създаден!", "Архивиране", JOptionPane.NO_OPTION);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Грешка при създаването на архва!", "Архивиране", JOptionPane.NO_OPTION);
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbtnArchiveDbActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        jsonImport json = new jsonImport();
+        try {
+            json.importJson();
+            JOptionPane.showMessageDialog(this, "Успешно импортиране!", "Импортиране", JOptionPane.NO_OPTION);
+        } catch (IOException | ParseException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Файлът не е намерен!","Импортиране", JOptionPane.NO_OPTION);
+        } catch (java.text.ParseException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 /**
  * @param args the command line arguments
  */
@@ -1108,14 +1181,17 @@ public static void main(String args[]) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JMenuItem JmiPayments;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jDate;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     public static javax.swing.JLabel jPicture;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel jUser;
+    public javax.swing.JButton jbtnArchiveDb;
     private javax.swing.JMenuItem jbtnCredit;
     private javax.swing.JButton jbtnFastArticle;
     private javax.swing.JButton jbtnFastClient;
