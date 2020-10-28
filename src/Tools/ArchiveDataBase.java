@@ -25,7 +25,7 @@ import org.apache.commons.net.ftp.FTPClient;
  */
 public class ArchiveDataBase {
     
-    public void archiveDb () throws FileNotFoundException, IOException{ 
+    public void archiveDb () throws FileNotFoundException, IOException, Exception{ 
         
         String file = null;
         String server = null;
@@ -41,10 +41,7 @@ public class ArchiveDataBase {
             System.err.println(e.getMessage());
         }       
         
-        //String server = "tunparts.de";
         int port = 21;
-        //String user = "viko@tunparts.de";
-        //String pass = "selvi2020";
         
         FTPClient ftpClient = new FTPClient();      
         
@@ -90,6 +87,6 @@ public class ArchiveDataBase {
         if (ftpClient.isConnected()) {
                 ftpClient.logout();
                 ftpClient.disconnect();
-                    }
-            }   
+        }
+    }   
 }

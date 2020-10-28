@@ -217,6 +217,11 @@ public class Login extends javax.swing.JFrame {
                     main.JmiPayments.setVisible(false);
                     main.jmiCountries.setVisible(false);
                     main.jmiGenerator.setVisible(false);
+                    main.jbtnArchiveDb.setVisible(false);;
+                    main.jbtnImport.setVisible(false);
+                    main.jmiFTPArchive.setVisible(false);
+                    main.jmiRest.setVisible(false);
+                    main.jmiImport.setVisible(false);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Грешен Потребител/Парола!");

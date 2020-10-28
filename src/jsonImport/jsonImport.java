@@ -20,9 +20,9 @@ import org.json.simple.parser.ParseException;
 import static Tools.getConnection.getConnection;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import org.ini4j.Wini;
-
+import javax.swing.filechooser.FileNameExtensionFilter;
 /**
  *
  * @author Viko
@@ -31,15 +31,21 @@ public class jsonImport {
     
     public void importJson() throws FileNotFoundException, IOException, ParseException, java.text.ParseException {
       
-      String filename = null;  
-      try {
-            Wini ini = new Wini(new File("dbPath.ini"));
-            filename = ini.get("import", "filename");
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }    
+      String filename = null; 
       
-      //String filename = "E:/order.json";
+      JFileChooser file = new JFileChooser();
+      file.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+      FileNameExtensionFilter filter = new FileNameExtensionFilter("*.json", "json");
+      file.addChoosableFileFilter(filter);
+      int result = file.showOpenDialog(null);
+      if(result == JFileChooser.APPROVE_OPTION){
+        File selectedFile = file.getSelectedFile();
+        String path = selectedFile.getAbsolutePath();
+        filename = path;
+        }else{
+          System.out.println("No File selected");
+        }
         
       String order_status = "";
       
