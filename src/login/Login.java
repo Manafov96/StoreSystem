@@ -222,6 +222,7 @@ public class Login extends javax.swing.JFrame {
                     main.jmiFTPArchive.setVisible(false);
                     main.jmiRest.setVisible(false);
                     main.jmiImport.setVisible(false);
+                    main.jmiImportXml.setVisible(false);
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Грешен Потребител/Парола!");

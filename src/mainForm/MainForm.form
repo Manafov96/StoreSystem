@@ -86,10 +86,25 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/mainForm/Import32.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="&#x418;&#x43c;&#x43f;&#x43e;&#x440;&#x442;"/>
+                <Property name="text" type="java.lang.String" value="&#x418;&#x43c;&#x43f;&#x43e;&#x440;&#x442; (json)"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiImportActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
+              </AuxValues>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jmiImportXml">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/mainForm/Import32.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="&#x418;&#x43c;&#x43f;&#x43e;&#x440;&#x442; (xml)"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jmiImportXmlActionPerformed"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
@@ -741,7 +756,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/mainForm/Import32.png"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="&#x418;&#x43c;&#x43f;&#x43e;&#x440;&#x442;&#x438;&#x440;&#x430;&#x43d;&#x435; &#x43d;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x438; &#x43e;&#x442; &#x443;&#x435;&#x431; &#x43c;&#x430;&#x433;&#x430;&#x437;&#x438;&#x43d;!"/>
+            <Property name="toolTipText" type="java.lang.String" value="&#x418;&#x43c;&#x43f;&#x43e;&#x440;&#x442;&#x438;&#x440;&#x430;&#x43d;&#x435; &#x43d;&#x430; &#x434;&#x430;&#x43d;&#x43d;&#x438; &#x43e;&#x442; &#x443;&#x435;&#x431; &#x43c;&#x430;&#x433;&#x430;&#x437;&#x438;&#x43d;! (json)"/>
             <Property name="focusPainted" type="boolean" value="false"/>
           </Properties>
           <Events>

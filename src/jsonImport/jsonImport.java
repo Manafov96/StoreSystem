@@ -165,7 +165,7 @@ public class jsonImport {
             
         try {
             connection = getConnection();
-            ps = connection.prepareStatement("execute procedure IMPORT_DETAILS(?,?,?,?,?,?,?,?)");
+            ps = connection.prepareStatement("execute procedure IMPORT_DETAILS(?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, billing_country);
             ps.setString(2, billing_company);
             ps.setString(3, sku);
@@ -174,6 +174,9 @@ public class jsonImport {
             ps.setString(6, item_price_inc_tax);
             ps.setString(7, order_shipping);
             ps.setString(8, order_shipping_plus_tax);
+            ps.setString(9, full_name);
+            ps.setString(10, billing_city);
+            ps.setDate(11, date);
             ps.executeUpdate();
             //connection.close();
         } catch (SQLException ex) {

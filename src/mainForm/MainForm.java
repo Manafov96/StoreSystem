@@ -53,6 +53,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import jsonImport.jsonImport;
 import org.json.simple.parser.ParseException;
+import xmlImport.xmlImport;
 /**
  *
  * @author Viko
@@ -131,6 +132,7 @@ public class MainForm extends javax.swing.JFrame {
         jbtnCredit = new javax.swing.JMenuItem();
         jmiFTPArchive = new javax.swing.JMenuItem();
         jmiImport = new javax.swing.JMenuItem();
+        jmiImportXml = new javax.swing.JMenuItem();
         jmSales = new javax.swing.JMenu();
         jmiSaleDay = new javax.swing.JMenuItem();
         jmiSaleMonth = new javax.swing.JMenuItem();
@@ -266,7 +268,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         jbtnImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/Import32.png"))); // NOI18N
-        jbtnImport.setToolTipText("Импортиране на данни от уеб магазин!");
+        jbtnImport.setToolTipText("Импортиране на данни от уеб магазин! (json)");
         jbtnImport.setFocusPainted(false);
         jbtnImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -401,13 +403,23 @@ public class MainForm extends javax.swing.JFrame {
         jmOperaction.add(jmiFTPArchive);
 
         jmiImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/Import32.png"))); // NOI18N
-        jmiImport.setText("Импорт");
+        jmiImport.setText("Импорт (json)");
+        jmiImport.setToolTipText("");
         jmiImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jmiImportActionPerformed(evt);
             }
         });
         jmOperaction.add(jmiImport);
+
+        jmiImportXml.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainForm/Import32.png"))); // NOI18N
+        jmiImportXml.setText("Импорт (xml)");
+        jmiImportXml.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jmiImportXmlActionPerformed(evt);
+            }
+        });
+        jmOperaction.add(jmiImportXml);
 
         jMenuBar1.add(jmOperaction);
 
@@ -1189,6 +1201,12 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jmiImportActionPerformed
 
+    private void jmiImportXmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiImportXmlActionPerformed
+        xmlImport xml = new xmlImport();
+        xml.importXML();
+        JOptionPane.showMessageDialog(this, "Успешно импортиране!", "Импортиране", JOptionPane.NO_OPTION);
+    }//GEN-LAST:event_jmiImportXmlActionPerformed
+
 /**
  * @param args the command line arguments
  */
@@ -1281,6 +1299,7 @@ public static void main(String args[]) {
     private javax.swing.JMenuItem jmiForDelivery;
     public javax.swing.JMenuItem jmiGenerator;
     public javax.swing.JMenuItem jmiImport;
+    public javax.swing.JMenuItem jmiImportXml;
     public javax.swing.JMenuItem jmiMeasure;
     private javax.swing.JMenuItem jmiMoney;
     private javax.swing.JMenuItem jmiOfferReports;
